@@ -1,6 +1,7 @@
 import {Pizza} from "lucide-react";
 import {Link} from "react-router-dom";
 import MobileNav from "./MobileNav";
+import DesktopNav from "./DesktopNav";
 
 export default function Header() {
   return (
@@ -21,6 +22,9 @@ export default function Header() {
         </Link>
         <div className="md:hidden">
           <MobileNav />
+        </div>
+        <div className="hidden md:block">
+          <DesktopNav />
         </div>
       </div>
     </div>
