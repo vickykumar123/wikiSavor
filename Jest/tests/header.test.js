@@ -1,4 +1,4 @@
-import {afterAll, beforeAll, expect, test} from "@jest/globals";
+import {afterAll, beforeAll, describe, expect, test} from "@jest/globals";
 
 import puppeteer from "puppeteer";
 
@@ -15,7 +15,17 @@ afterAll(async () => {
   await browser.close();
 });
 
-test("the header has correct text", async () => {
-  const headerText = await page.$eval("a[href='/']", (el) => el.innerText);
-  expect(headerText).toBe("wikiSavor");
+describe("Test for navbar", () => {
+  test("the header has correct text", async () => {
+    const headerText = await page.$eval("a[href='/']", (el) => el.innerText);
+    expect(headerText).toBe("wikiSavor");
+  });
+
+  test("login button is visible", async () => {
+    const buttonText = await page.$eval(
+      ".desktop-nav button",
+      (el) => el.innerText
+    );
+    expect(buttonText).toBe("Log In");
+  });
 });

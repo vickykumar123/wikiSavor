@@ -23,7 +23,7 @@ export default function Header() {
         <div className="md:hidden">
           <MobileNav />
         </div>
-        <div className="hidden md:block">
+        <div className="hidden md:block desktop-nav">
           <DesktopNav />
         </div>
       </div>
