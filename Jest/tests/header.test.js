@@ -29,3 +29,9 @@ describe("Test for navbar", () => {
     expect(buttonText).toBe("Log In");
   });
 });
+
+test("hero image is rendered", async () => {
+  const image = await page.$eval(".hero-img", (el) => el.src);
+  await page.waitForSelector(".hero-img");
+  expect(image).toMatch(/hero\.png/);
+});

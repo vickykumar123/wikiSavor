@@ -5,9 +5,9 @@ import {
   SheetDescription,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
-import {Separator} from "./ui/separator";
-import {Button} from "./ui/button";
+} from "../ui/sheet";
+import {Separator} from "../ui/separator";
+import {Button} from "../ui/button";
 
 export default function MobileNav() {
   return (

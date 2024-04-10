@@ -20,7 +20,10 @@
   "jest": {
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "./tests/setup.js"
+    ]
   },
   "author": "",
   "license": "ISC"
