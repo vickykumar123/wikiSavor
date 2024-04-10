@@ -1,5 +1,6 @@
 import {Pizza} from "lucide-react";
 import {Link} from "react-router-dom";
+import MobileNav from "./MobileNav";
 
 export default function Header() {
   return (
@@ -11,9 +12,16 @@ export default function Header() {
         >
           wikiSavor
           <span>
-            <Pizza size={29} strokeWidth={3} />
+            <Pizza
+              size={29}
+              strokeWidth={2}
+              className="-rotate-90 translate-y-1"
+            />
           </span>
         </Link>
+        <div className="md:hidden">
+          <MobileNav />
+        </div>
       </div>
     </div>
   );
