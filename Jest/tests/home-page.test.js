@@ -35,3 +35,8 @@ test("hero image is rendered", async () => {
   await page.waitForSelector(".hero-img");
   expect(image).toMatch(/hero\.png/);
 });
+
+test("footer is rendered", async () => {
+  const footerText = await page.$eval(".footer span", (el) => el.innerHTML);
+  expect(footerText).toBe("wikiSavor");
+});
