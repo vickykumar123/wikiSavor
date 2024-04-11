@@ -1,5 +1,5 @@
-import {API_URL} from "@/lib/contants";
 import {fetchApi} from "@/lib/fetchApi";
+import {useAuth0} from "@auth0/auth0-react";
 import {useMutation} from "react-query";
 
 type CreateUserQuery = {
@@ -9,7 +9,9 @@ type CreateUserQuery = {
 };
 
 export const useCreateUser = () => {
+  const {getAccessTokenSilently} = useAuth0();
   const createCurrentUser = async (user: CreateUserQuery) => {
+    const accessToken = await getAccessTokenSilently();
     const requestBody = {
       query: `mutation CreateCurrentUser($auth0Id:String!,$email:String!,$name:String!){
         createCurrentUser(currentUserInput:{auth0Id:$auth0Id,email:$email,name:$name}){
@@ -26,7 +28,7 @@ export const useCreateUser = () => {
       },
     };
 
-    const response = await fetchApi(requestBody);
+    const response = await fetchApi(requestBody, accessToken);
   };
 
   const {

@@ -9,6 +9,7 @@ export const resolver = {
     context: {req: Request; res: Response}
   ) => {
     try {
+      console.log(context.req.cookies);
       const {auth0Id, email, name} = currentUserInput;
       const existingUser = await User.findOne({auth0Id});
       if (existingUser) {
