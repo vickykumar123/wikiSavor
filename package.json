@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "graphql-playground-middleware-express": "^1.7.23"
+  }
+}

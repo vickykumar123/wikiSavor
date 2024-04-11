@@ -18,15 +18,12 @@ const userSchema = new mongoose.Schema(
     },
     addressLine1: {
       type: String,
-      required: [true, "address is required"],
     },
     city: {
       type: String,
-      required: [true, "city is required"],
     },
     country: {
       type: String,
-      required: [true, "country is required"],
     },
   },
   {timestamps: true}
