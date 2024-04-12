@@ -34,7 +34,6 @@ export const verifyUser = async (
   const token = authorization.split(" ")[1];
   try {
     let user;
-
     const decoded = jwt.decode(token) as jwt.JwtPayload;
     const auth0Id = decoded?.sub;
     user = await client.get(currentUserKey(auth0Id!));
