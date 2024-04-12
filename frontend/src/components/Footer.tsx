@@ -5,7 +5,7 @@ export default function Footer() {
         <span className="text-3xl text-white font-bold tracking-tight font-mono italic">
           wikiSavor
         </span>
-        <section className="text-white font-bold tracking-tighter flex gap-4">
+        <section className="text-white font-bold tracking-tighter flex gap-4 cursor-pointer">
           <span>Privacy Policy</span>
           <span>Terms of Service</span>
         </section>

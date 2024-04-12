@@ -7,6 +7,7 @@ import {createHandler} from "graphql-http/lib/use/express";
 import expressPlayground from "graphql-playground-middleware-express";
 import {schema} from "./graphql/schema";
 import {resolver} from "./graphql/resolvers";
+import {jwtCheck} from "./middleware/auth";
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,9 @@ app.listen(PORT, () => {
 mongoose.connect(process.env.MONGO_DATABASE_URL!).then(() => {
   console.log("Mongo database connected");
 });
+
+// Middlewares
+app.use(jwtCheck);
 
 app.get("/playground", expressPlayground({endpoint: "/graphql"}));
 app.use("/graphql", (req, res, next) =>
