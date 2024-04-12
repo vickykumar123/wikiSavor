@@ -21,6 +21,45 @@ export const resolver = {
       });
       return newUser;
     } catch (error) {
+      throw new Error("Error in creating the user.");
+    }
+  },
+
+  updateCurrentUser: async (
+    {
+      updateUserInput,
+    }: {
+      updateUserInput: any;
+    },
+    context: {req: Request; res: Response}
+  ) => {
+    try {
+      const {req, res} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
+      const {name, addressLine1, city, country} = updateUserInput;
+      if (updateUserInput.email) {
+        throw new Error("Email can't be updated.");
+      }
+      if (!addressLine1 || !city || !country || !name) {
+        throw new Error("Invalid inputs");
+      }
+
+      const currentUser = await User.findById(req.userId);
+      if (!currentUser) {
+        throw new Error("User not found");
+      }
+
+      currentUser.name = name;
+      currentUser.addressLine1 = addressLine1;
+      currentUser.city = city;
+      currentUser.country = country;
+      await currentUser.save();
+
+      return currentUser;
+    } catch (error) {
+      // throw new Error("Error in updating user.");
       throw new Error(error as string);
     }
   },

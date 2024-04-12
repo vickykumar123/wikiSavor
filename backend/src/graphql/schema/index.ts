@@ -5,14 +5,22 @@ type User{
     auth0Id:String!
     email:String!
     name:String!
+    addressLine1:String
+    city:String
+    country:String
 }
-
-
 
 input CurrentUserInput{
     auth0Id:String!
     email:String!
     name:String!
+}
+
+input UpdateUserInput{
+    name:String
+    addressLine1:String
+    city:String
+    country:String
 }
 
 type RootQuery{
@@ -21,6 +29,7 @@ type RootQuery{
 
 type RootMutation{
     createCurrentUser(currentUserInput:CurrentUserInput):User
+    updateCurrentUser(updateUserInput:UpdateUserInput):User
 }
 
 schema{

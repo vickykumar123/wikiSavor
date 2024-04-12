@@ -11,7 +11,7 @@ export const fetchApi = async (
     method: "POST",
     credentials: "include",
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${accessToken || ""}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(requestBody),

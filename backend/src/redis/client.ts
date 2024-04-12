@@ -7,5 +7,6 @@ const client = createClient({
   password: process.env.REDIS_PASSWORD,
 });
 client.on("error", (err) => console.error(err));
-client.connect();
+client.connect().then(() => console.log("Redis is connected"));
+
 export default client;
