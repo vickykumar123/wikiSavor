@@ -45,7 +45,6 @@ export default function UserProfileForm({
       addressLine1: currentUser.addressLine1,
     },
   });
-
   useEffect(() => {
     form.reset(currentUser);
   }, [currentUser, form]);

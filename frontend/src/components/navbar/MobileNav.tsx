@@ -26,7 +26,7 @@ export default function MobileNav() {
             </span>
           ) : (
             <span className="flex items-center  font-bold text-orange-700  gap-2 outline-none">
-              <CircleUserRound /> {user?.name}
+              <CircleUserRound /> {user?.email}
             </span>
           )}
         </SheetTitle>

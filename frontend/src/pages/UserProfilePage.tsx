@@ -8,7 +8,6 @@ import {Loader2} from "lucide-react";
 export default function UserProfilePage() {
   const {currentUserData, isLoading: isGetUserLoading} = useGetCurrentUser();
   const {updateUser, isLoading: isUpdateLoading} = useUpdateMyUser();
-  console.log(currentUserData);
   if (isGetUserLoading) {
     return (
       <Loader2 size={45} className="text-orange-500 animate-spin mx-auto" />

@@ -28,13 +28,13 @@ export const verifyUser = async (
   const {authorization} = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer")) {
-    return res.status(401).json({message: "Unauthorized"});
+    return next();
   }
 
-  const token = authorization.split(" ")[1];
+  const token = authorization?.split(" ")[1];
   try {
     let user;
-    const decoded = jwt.decode(token) as jwt.JwtPayload;
+    const decoded = jwt.decode(token!) as jwt.JwtPayload;
     const auth0Id = decoded?.sub;
     user = await client.get(currentUserKey(auth0Id!));
     if (user) {
@@ -52,6 +52,6 @@ export const verifyUser = async (
     req.auth0Id = auth0Id!;
     next();
   } catch (err) {
-    return res.status(401).json({message: "Unauthorized"});
+    next();
   }
 };
