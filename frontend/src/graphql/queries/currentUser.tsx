@@ -1,12 +1,55 @@
 import {toast} from "sonner";
-import {useMutation} from "react-query";
+import {useMutation, useQuery} from "react-query";
 import {fetchApi} from "@/lib/fetchApi";
 import {useAuth0} from "@auth0/auth0-react";
+import {User} from "@/types";
 
 type CreateUserQuery = {
   auth0Id: string;
   email: string;
   name: string;
+};
+
+type UpdateCurrentUserRequest = {
+  name: string;
+  addressLine1: string;
+  city: string;
+  country: string;
+};
+
+export const useGetCurrentUser = () => {
+  const {getAccessTokenSilently} = useAuth0();
+  const getCurrentUser = async (): Promise<User> => {
+    const accessToken = await getAccessTokenSilently();
+    const requestbody = {
+      query: `query GetUserInfo{
+        getCurrentUserInfo{
+          email
+          name
+          addressLine1
+          city
+          country
+        }
+      }`,
+    };
+
+    const response = await fetchApi(requestbody, accessToken);
+    if (!response.ok) {
+      throw new Error("Unable to get user info");
+    }
+    const responseData = await response.json();
+    return responseData.data.getCurrentUserInfo;
+  };
+
+  const {
+    data: currentUserData,
+    isLoading,
+    isError,
+  } = useQuery("getCurrentUserInfo", getCurrentUser);
+
+  if (isError) toast.error("Something went wrong, Please try again later!!");
+
+  return {currentUserData, isLoading};
 };
 
 export const useCreateUser = () => {
@@ -37,13 +80,6 @@ export const useCreateUser = () => {
 
   const {mutateAsync: createUser, isLoading} = useMutation(createCurrentUser);
   return {createUser, isLoading};
-};
-
-type UpdateCurrentUserRequest = {
-  name: string;
-  addressLine1: string;
-  city: string;
-  country: string;
 };
 
 export const useUpdateMyUser = () => {

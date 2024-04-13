@@ -4,19 +4,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import {CircleUserRound, User} from "lucide-react";
+import {CircleUserRound, Loader2, User} from "lucide-react";
 import {useAuth0} from "@auth0/auth0-react";
 import {Link} from "react-router-dom";
 import {Separator} from "./ui/separator";
 import {Button} from "./ui/button";
+import {useGetCurrentUser} from "@/graphql/queries/currentUser";
 
 export default function UsernameMenu() {
   const {user, logout} = useAuth0();
+  const {currentUserData, isLoading: isGetUserLoading} = useGetCurrentUser();
+  if (isGetUserLoading)
+    return <Loader2 className="animate-spin text-orange-500" />;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center px-3 font-bold text-orange-600 hover:text-orange-500 gap-2 outline-none">
         <CircleUserRound className="text-orange-600" />
-        {user?.name}
+        {currentUserData?.name || user?.name}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64">
         <DropdownMenuItem>
