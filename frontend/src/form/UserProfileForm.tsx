@@ -77,7 +77,7 @@ export default function UserProfileForm({onSave, isLoading}: UserProfileProps) {
               <FormItem>
                 <FormLabel>Address Line1</FormLabel>
                 <FormControl>
-                  <Input {...field} className="bg-white md:w-80" />
+                  <Input {...field} className="bg-white md:w-72 xl:w-[800px]" />
                 </FormControl>
               </FormItem>
             )}

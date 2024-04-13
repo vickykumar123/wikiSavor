@@ -1,6 +1,7 @@
+import {toast} from "sonner";
+import {useMutation} from "react-query";
 import {fetchApi} from "@/lib/fetchApi";
 import {useAuth0} from "@auth0/auth0-react";
-import {useMutation} from "react-query";
 
 type CreateUserQuery = {
   auth0Id: string;
@@ -34,14 +35,8 @@ export const useCreateUser = () => {
     }
   };
 
-  const {
-    mutateAsync: createUser,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useMutation(createCurrentUser);
-
-  return {createUser, isLoading, isError, isSuccess};
+  const {mutateAsync: createUser, isLoading} = useMutation(createCurrentUser);
+  return {createUser, isLoading};
 };
 
 type UpdateCurrentUserRequest = {
@@ -88,16 +83,19 @@ export const useUpdateMyUser = () => {
     isLoading,
     isError,
     isSuccess,
-    error,
     reset,
   } = useMutation(updateCurrentUserRequest);
+
+  if (isSuccess) {
+    toast.success("User profile updated!");
+  }
+  if (isError) {
+    toast.error("Unable to update the profile, Please try again!");
+    reset();
+  }
 
   return {
     updateUser,
     isLoading,
-    isError,
-    isSuccess,
-    error,
-    reset,
   };
 };

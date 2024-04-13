@@ -15,6 +15,7 @@ export const currentUser = {
       if (existingUser) {
         return existingUser;
       }
+
       const newUser = await User.create({
         auth0Id,
         email,
