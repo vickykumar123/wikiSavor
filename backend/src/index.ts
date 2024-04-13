@@ -1,4 +1,4 @@
-import express from "express";
+import express, {Request, Response} from "express";
 import cors from "cors";
 import "dotenv/config";
 import mongoose from "mongoose";
@@ -26,6 +26,10 @@ mongoose
     console.log("Mongo database connected");
   })
   .catch((error) => console.log(error));
+
+app.get("/health", async (req: Request, res: Response) => {
+  res.send({message: "health OK!"});
+});
 
 // Middlewares
 app.use(jwtCheck);
