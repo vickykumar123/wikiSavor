@@ -5,6 +5,7 @@ import client from "../../redis/client";
 import {currentUserKey} from "../../redis/keys";
 
 export const currentUser = {
+  // Create User
   createCurrentUser: async (
     {currentUserInput}: {currentUserInput: UserType},
     context: {req: Request; res: Response}
@@ -26,7 +27,7 @@ export const currentUser = {
       throw new Error("Error in creating the user.");
     }
   },
-
+  // Update User
   updateCurrentUser: async (
     {
       updateUserInput,
@@ -61,8 +62,34 @@ export const currentUser = {
       await client.del(currentUserKey(req.auth0Id));
       return currentUser;
     } catch (error) {
-      // throw new Error("Error in updating user.");
-      throw new Error(error as string);
+      throw new Error("Error in updating user.");
+      // throw new Error(error as string);
+    }
+  },
+
+  // Get user info
+  getCurrentUserInfo: async (
+    _: any,
+    context: {req: Request; res: Response}
+  ) => {
+    try {
+      const {req, res} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
+      const userFromCache = await client.get(currentUserKey(req.auth0Id));
+      if (userFromCache) {
+        return JSON.parse(userFromCache);
+      }
+
+      const currentUser = await User.findById(req.userId);
+      await client.set(
+        currentUserKey(currentUser?.auth0Id!),
+        JSON.stringify(currentUser)
+      );
+      return currentUser;
+    } catch (error) {
+      throw new Error("Unable to get user info");
     }
   },
 };
