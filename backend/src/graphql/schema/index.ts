@@ -17,10 +17,10 @@ input CurrentUserInput{
 }
 
 input UpdateUserInput{
-    name:String
-    addressLine1:String
-    city:String
-    country:String
+    name:String!
+    addressLine1:String!
+    city:String!
+    country:String!
 }
 
 type RootQuery{

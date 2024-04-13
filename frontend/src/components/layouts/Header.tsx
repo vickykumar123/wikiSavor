@@ -1,11 +1,11 @@
 import {Pizza} from "lucide-react";
 import {Link} from "react-router-dom";
-import MobileNav from "./navbar/MobileNav";
-import DesktopNav from "./navbar/DesktopNav";
+import MobileNav from "../navbar/MobileNav";
+import DesktopNav from "../navbar/DesktopNav";
 
 export default function Header() {
   return (
-    <div className="border-b-3 border-b-orange-500 py-4 bg-orange-100/30 shadow-lg">
+    <div className="border-b-2 border-b-orange-500 py-4 bg-orange-100/30 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         <Link
           className="text-3xl italic font-mono flex items-center gap-1 font-bold tracking-tight text-orange-500"

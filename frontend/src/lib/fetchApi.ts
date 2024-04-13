@@ -17,8 +17,5 @@ export const fetchApi = async (
     body: JSON.stringify(requestBody),
   });
 
-  if (!response.ok) {
-    throw new Error("Failed to create user");
-  }
   return response;
 };
