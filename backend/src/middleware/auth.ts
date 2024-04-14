@@ -26,7 +26,6 @@ export const verifyUser = async (
   next: NextFunction
 ) => {
   const {authorization} = req.headers;
-
   if (!authorization || !authorization.startsWith("Bearer")) {
     return next();
   }
@@ -37,13 +36,12 @@ export const verifyUser = async (
     const decoded = jwt.decode(token!) as jwt.JwtPayload;
     const auth0Id = decoded?.sub;
     user = await client.get(currentUserKey(auth0Id!));
-    if (user) {
-      user = JSON.parse(user);
+    if (user !== "null" && user !== null) {
+      user = JSON.parse(user!);
     } else {
       user = await User.findOne({auth0Id});
       await client.set(currentUserKey(auth0Id!), JSON.stringify(user));
     }
-
     if (!user) {
       throw new Error("User not found");
     }

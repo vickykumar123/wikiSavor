@@ -1,3 +1,4 @@
+import {DeleteButton} from "@/components/DeleteButton";
 import LoadingButton from "@/components/LoadingButton";
 import {Button} from "@/components/ui/button";
 import {
@@ -124,11 +125,14 @@ export default function UserProfileForm({
             )}
           />
         </div>
-        {isLoading ? (
-          <LoadingButton />
-        ) : (
-          <Button variant="submit">Submit</Button>
-        )}
+        <div className="flex justify-between">
+          {isLoading ? (
+            <LoadingButton />
+          ) : (
+            <Button variant="submit">Submit</Button>
+          )}
+          <DeleteButton />
+        </div>
       </form>
     </Form>
   );

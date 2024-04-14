@@ -89,7 +89,25 @@ export const currentUser = {
       );
       return currentUser;
     } catch (error) {
+      console.log(error);
       throw new Error("Unable to get user info");
+    }
+  },
+
+  // Delete Current User,
+
+  deleteAccount: async (_: any, context: {req: Request; res: Response}) => {
+    try {
+      const {req, res} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
+      const deleteUser = await User.findByIdAndDelete(req.userId);
+      await client.del(currentUserKey(req.auth0Id));
+      console.log("User Deleted");
+      return deleteUser;
+    } catch (error) {
+      throw new Error("Unable to delete the user");
     }
   },
 };

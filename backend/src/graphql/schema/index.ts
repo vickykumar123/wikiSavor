@@ -25,6 +25,7 @@ input UpdateUserInput{
 
 type RootQuery{
     getCurrentUserInfo:User!
+    deleteAccount:User!
 }
 
 type RootMutation{

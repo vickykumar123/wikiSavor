@@ -135,3 +135,43 @@ export const useUpdateMyUser = () => {
     isLoading,
   };
 };
+
+export const useDeleteCurrentUser = () => {
+  const {getAccessTokenSilently} = useAuth0();
+  const deleteCurrentUser = async (): Promise<User> => {
+    const accessToken = await getAccessTokenSilently();
+    const requestbody = {
+      query: `query DeleteCurrentUser{
+        deleteAccount{
+          _id
+          email
+        } 
+      }`,
+    };
+
+    const response = await fetchApi(requestbody, accessToken);
+    if (!response.ok) {
+      throw new Error("Unable to get user info");
+    }
+    const responseData = await response.json();
+    return responseData.data.deleteAccount;
+  };
+
+  const {
+    data: currentUserData,
+    isLoading,
+    isSuccess,
+    isError,
+    refetch,
+  } = useQuery("deleteCurrentUser", deleteCurrentUser, {
+    refetchOnWindowFocus: false,
+    enabled: false, // disable this query from automatically running
+  });
+  if (isSuccess)
+    toast.success(
+      "Deleted the account successfully, Will meet you again soon!!"
+    );
+  if (isError) toast.error("Something went wrong, Please try again later!!");
+
+  return {currentUserData, isLoading, refetch};
+};

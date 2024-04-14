@@ -31,11 +31,11 @@ app.get("/health", async (req: Request, res: Response) => {
   res.send({message: "health OK!"});
 });
 
+app.get("/playground", expressPlayground({endpoint: "/graphql"}));
 // Middlewares
 app.use(jwtCheck);
 app.use(verifyUser);
 
-app.get("/playground", expressPlayground({endpoint: "/graphql"}));
 app.use("/graphql", (req, res, next) =>
   createHandler({
     schema: schema,
