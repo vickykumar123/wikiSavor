@@ -9,6 +9,8 @@ import {schema} from "./graphql/schema";
 import {resolver} from "./graphql/resolvers";
 import {jwtCheck, verifyUser} from "./middleware/auth";
 import {error} from "console";
+import {upload} from "./lib/upload";
+import {uploadSingle} from "./controller/uploadController";
 
 const app = express();
 app.use(express.json());
@@ -36,6 +38,7 @@ app.get("/playground", expressPlayground({endpoint: "/graphql"}));
 app.use(jwtCheck);
 app.use(verifyUser);
 
+app.post("/upload-single", upload.single("image"), uploadSingle);
 app.use("/graphql", (req, res, next) =>
   createHandler({
     schema: schema,
