@@ -3,7 +3,7 @@ import {Restaurant as RestaurantType} from "../types/modelType";
 
 const menuItemSchema = new mongoose.Schema({
   name: {type: String, required: [true, "Menu name is required"]},
-  price: {type: String, required: [true, "Menu price is required"]},
+  price: {type: Number, required: [true, "Menu price is required"]},
 });
 
 const restaurantSchema = new mongoose.Schema<RestaurantType>(
@@ -26,11 +26,11 @@ const restaurantSchema = new mongoose.Schema<RestaurantType>(
       require: [true, "Country is required"],
     },
     deliveryPrice: {
-      type: String,
+      type: Number,
       require: [true, "Delivery Price is required"],
     },
     estimatedDeliveryTime: {
-      type: String,
+      type: Number,
       require: [true, "Time is required"],
     },
     cuisines: [{type: String, required: [true, "Cuisined is Requried"]}],

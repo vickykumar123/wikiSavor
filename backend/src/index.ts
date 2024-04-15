@@ -37,8 +37,8 @@ app.get("/playground", expressPlayground({endpoint: "/graphql"}));
 // Middlewares
 app.use(jwtCheck);
 app.use(verifyUser);
-
-app.post("/upload-single", upload.single("image"), uploadSingle);
+app.use(upload.single("image"));
+// app.post("/upload-single", upload.single("image"), uploadSingle);
 app.use("/graphql", (req, res, next) =>
   createHandler({
     schema: schema,

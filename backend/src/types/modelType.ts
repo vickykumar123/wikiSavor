@@ -10,7 +10,7 @@ export interface User {
 }
 interface Menu {
   name: string;
-  price: string;
+  price: Number;
 }
 
 export interface Restaurant {
@@ -18,8 +18,8 @@ export interface Restaurant {
   restaurantName: string;
   city: string;
   country: string;
-  deliveryPrice: string;
-  estimatedDeliveryTime: string;
+  deliveryPrice: number;
+  estimatedDeliveryTime: number;
   cuisines: string[];
   menuItems: Menu;
   imageUrl: string;

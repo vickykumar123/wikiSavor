@@ -10,6 +10,24 @@ type User{
     country:String
 }
 
+type Menu{
+    name:String!
+    price:Float!
+}
+
+type Restaurant{
+    user: User!
+  restaurantName: String!
+  city: String!
+  country: String!
+  deliveryPrice: Float!
+  estimatedDeliveryTime: Float!
+  cuisines: [String]
+  menuItems: [Menu]
+  imageUrl: String!
+  lastUpdate: String
+}
+
 input CurrentUserInput{
     auth0Id:String!
     email:String!
@@ -22,7 +40,22 @@ input UpdateUserInput{
     city:String!
     country:String!
 }
+input MenuInput{
+    name:String!
+    price:Float!
+}
 
+input RestaurantInput{
+    restaurantName: String!
+    city: String!
+    country: String!
+    deliveryPrice: Float!
+    estimatedDeliveryTime: Float!
+    cuisines: [String]
+    menuItems: MenuInput
+    imageUrl: String!
+    lastUpdate: String
+}
 type RootQuery{
     getCurrentUserInfo:User!
     deleteAccount:User!
@@ -31,6 +64,7 @@ type RootQuery{
 type RootMutation{
     createCurrentUser(currentUserInput:CurrentUserInput):User
     updateCurrentUser(updateUserInput:UpdateUserInput):User
+    createUserRestaurant(restaurantInput:RestaurantInput):Restaurant
 }
 
 schema{
