@@ -1,4 +1,4 @@
-import {User} from "lucide-react";
+import {Hotel, User} from "lucide-react";
 import {Link} from "react-router-dom";
 import {Button} from "../ui/button";
 import {useAuth0} from "@auth0/auth0-react";
@@ -10,9 +10,16 @@ export default function MobileNavLinks() {
     <div className="flex flex-col w-full space-y-2">
       <Link
         to="/user-profile"
-        className="font-bold text-lg flex items-center gap-3 mx-auto text-orange-700 hover:text-orange-500"
+        className="font-bold text-lg flex items-center gap-3 text-orange-700 hover:text-orange-500"
       >
-        <User size={24} className="text-red-900" /> User Profile
+        <User size={24} className="text-red-900" /> My Profile
+      </Link>
+      <Separator />
+      <Link
+        to="/manage-resturant"
+        className="font-bold text-lg flex items-center gap-3 text-orange-700 hover:text-orange-500"
+      >
+        <Hotel size={24} className="text-red-900" /> Manage Restaurant
       </Link>
       <Separator />
       <Button

@@ -8,6 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {User} from "@/types";
@@ -83,6 +84,7 @@ export default function UserProfileForm({
               <FormControl>
                 <Input {...field} className="bg-white" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -97,6 +99,7 @@ export default function UserProfileForm({
                 <FormControl>
                   <Input {...field} className="bg-white md:w-72 xl:w-[800px]" />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -109,6 +112,7 @@ export default function UserProfileForm({
                 <FormControl>
                   <Input {...field} className="bg-white" />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -121,6 +125,7 @@ export default function UserProfileForm({
                 <FormControl>
                   <Input {...field} className="bg-white" />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
