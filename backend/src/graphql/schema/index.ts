@@ -64,6 +64,7 @@ type RootMutation{
     createCurrentUser(currentUserInput:CurrentUserInput):User
     updateCurrentUser(updateUserInput:UpdateUserInput):User
     createUserRestaurant(restaurantInput:RestaurantInput):Restaurant
+    updateCurrentUserRestaurant(restaurantInput:RestaurantInput):Restaurant
 }
 
 schema{

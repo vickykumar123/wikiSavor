@@ -36,11 +36,10 @@ export const useGetCurrentUserRestaurant = () => {
     return responseData;
   };
 
-  const {
-    data: restaurantData,
-    isLoading,
-    isError,
-  } = useQuery("getCurrentUserRestaurant", getCurrentUserRestaurant);
+  const {data: restaurantData, isLoading} = useQuery(
+    "getCurrentUserRestaurant",
+    getCurrentUserRestaurant
+  );
 
   return {restaurantData, isLoading};
 };
@@ -108,6 +107,72 @@ $estimatedDeliveryTime: Float!,$cuisines: [String]!,$menuItems:[MenuInputs],$ima
   if (isError) toast.success("Restaurant not created!");
 
   return {createRestaurant, isLoading};
+};
+
+export const useUpdateCurrentUserRestaurant = () => {
+  const {getAccessTokenSilently} = useAuth0();
+  const updateCurrentUserRestaurant = async (
+    restaurantFormData: Restaurant
+  ): Promise<Restaurant> => {
+    const accessToken = await getAccessTokenSilently();
+    console.log(restaurantFormData.imageUrl);
+    const requestBody = {
+      query: `mutation UpdateRestaurant($restaurantName: String!,
+$city: String!,$country: String!,$deliveryPrice: Float!,
+$estimatedDeliveryTime: Float!,$cuisines: [String]!,$menuItems:[MenuInputs],$imageUrl: String){
+  updateCurrentUserRestaurant(restaurantInput:{
+          restaurantName:$restaurantName,
+          city:$city,
+          country:$country,
+          deliveryPrice:$deliveryPrice,
+          estimatedDeliveryTime:$estimatedDeliveryTime,
+          cuisines:$cuisines,
+          menuItems:$menuItems,
+          imageUrl:$imageUrl,
+        }){
+          restaurantName
+          city
+          country
+          deliveryPrice
+          estimatedDeliveryTime
+          cuisines
+          menuItems{
+            name
+            price
+          }
+          imageUrl
+        }
+      }`,
+      variables: {
+        restaurantName: restaurantFormData.restaurantName,
+        city: restaurantFormData.city,
+        country: restaurantFormData.country,
+        deliveryPrice: restaurantFormData.deliveryPrice,
+        estimatedDeliveryTime: restaurantFormData.estimatedDeliveryTime,
+        cuisines: restaurantFormData.cuisines,
+        menuItems: restaurantFormData.menuItems,
+        imageUrl: restaurantFormData.imageUrl,
+      },
+    };
+
+    const response = await fetchApi(requestBody, accessToken);
+    if (!response.ok) {
+      throw new Error("Unable to submit create restaurant form");
+    }
+
+    return response.json();
+  };
+  const {
+    mutate: updateRestaurant,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useMutation(updateCurrentUserRestaurant);
+
+  if (isSuccess) toast.success("Restaurant update!");
+  if (isError) toast.success("Restaurant not updated!");
+
+  return {updateRestaurant, isLoading};
 };
 
 export const useUploadImage = () => {

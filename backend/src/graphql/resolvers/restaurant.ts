@@ -75,4 +75,50 @@ export const restaurant = {
       throw new Error("Unable to get restaurant details");
     }
   },
+
+  updateCurrentUserRestaurant: async (
+    {
+      restaurantInput,
+    }: {
+      restaurantInput: RestaurantType;
+    },
+    context: {req: Request; res: Response}
+  ) => {
+    try {
+      const {req, res} = context;
+      const {
+        restaurantName,
+        city,
+        country,
+        deliveryPrice,
+        estimatedDeliveryTime,
+        cuisines,
+        menuItems,
+        imageUrl,
+      } = restaurantInput;
+      const restaurant = await Restaurant.findOne({user: req.userId});
+      if (!restaurant) {
+        throw new Error("Restaurant does not exist.");
+      }
+
+      restaurant.restaurantName = restaurantName;
+      restaurant.city = city;
+      restaurant.country = country;
+      restaurant.deliveryPrice = deliveryPrice;
+      restaurant.estimatedDeliveryTime = estimatedDeliveryTime;
+      restaurant.cuisines = cuisines;
+      restaurant.menuItems = menuItems;
+      restaurant.imageUrl = imageUrl;
+      restaurant.lastUpdate = new Date();
+      await restaurant.save();
+      const fullRestaurant = await restaurant.populate({
+        path: "menu",
+        strictPopulate: false,
+      });
+      return fullRestaurant;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Unable to create the restaurant");
+    }
+  },
 };

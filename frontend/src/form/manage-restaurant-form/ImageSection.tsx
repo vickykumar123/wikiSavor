@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {useUploadImage} from "@/graphql/queries/currentUserRestaurant";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useFormContext} from "react-hook-form";
 
 export default function ImageSection() {
@@ -19,16 +19,18 @@ export default function ImageSection() {
   const image = getValues("image");
   const existingImageUrl = watch("imageUrl");
   const [imageUrl, setImageUrl] = useState();
-
   async function uploadImage() {
     try {
       const responsedImage = await uploadImageMutate(image);
-      setImageUrl(responsedImage);
-      setValue("imageUrl", imageUrl);
+      setImageUrl(() => responsedImage);
     } catch (error) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    if (imageUrl) setValue("imageUrl", imageUrl);
+  }, [imageUrl]);
 
   return (
     <div className="space-y-2">
