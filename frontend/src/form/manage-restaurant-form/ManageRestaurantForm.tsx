@@ -10,8 +10,10 @@ import ImageSection from "./ImageSection";
 import LoadingButton from "@/components/LoadingButton";
 import {Button} from "@/components/ui/button";
 import {Restaurant} from "@/types";
+import {useEffect} from "react";
 
 type ManageRestaurantFormProps = {
+  restaurant: Restaurant | undefined;
   onSave: (restaurantFormData: Restaurant) => void;
   isLoading: boolean;
 };
@@ -44,6 +46,7 @@ const formSchema = z.object({
 type RestaurantFormData = z.infer<typeof formSchema>;
 
 export default function ManageRestaurantForm({
+  restaurant,
   onSave,
   isLoading,
 }: ManageRestaurantFormProps) {
@@ -55,8 +58,13 @@ export default function ManageRestaurantForm({
     },
   });
 
+  useEffect(() => {
+    if (!restaurant) return;
+    // @ts-ignore
+    form.reset(restaurant.data?.getCurrentUserRestaurant);
+  }, [form, restaurant]);
+
   const onSubmit = (formDataJson: RestaurantFormData) => {
-    console.log(formDataJson);
     onSave(formDataJson);
   };
 

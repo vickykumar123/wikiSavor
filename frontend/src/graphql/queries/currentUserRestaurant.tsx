@@ -1,21 +1,56 @@
 import {fetchApi} from "@/lib/fetchApi";
 import {Restaurant} from "@/types";
 import {useAuth0} from "@auth0/auth0-react";
-import {useMutation} from "react-query";
+import {useMutation, useQuery} from "react-query";
 import {toast} from "sonner";
+
+export const useGetCurrentUserRestaurant = () => {
+  const {getAccessTokenSilently} = useAuth0();
+  const getCurrentUserRestaurant = async (): Promise<Restaurant> => {
+    const accessToken = await getAccessTokenSilently();
+    const requestBody = {
+      query: `query GetCurrentUserRestaurant{
+        getCurrentUserRestaurant{
+           restaurantName
+          city
+          country
+          deliveryPrice
+          estimatedDeliveryTime
+          cuisines
+          menuItems{
+            name
+            price
+          }
+          imageUrl 
+        }
+      }`,
+    };
+
+    const response = await fetchApi(requestBody, accessToken);
+    if (!response.ok) {
+      throw new Error("Unable to fetch the infomation");
+    }
+    const responseData = response.json();
+    // @ts-ignore
+
+    return responseData;
+  };
+
+  const {
+    data: restaurantData,
+    isLoading,
+    isError,
+  } = useQuery("getCurrentUserRestaurant", getCurrentUserRestaurant);
+
+  return {restaurantData, isLoading};
+};
 
 export const useCreateCurrentUserRestaurant = () => {
   const {getAccessTokenSilently} = useAuth0();
   const createCurrentUserRestaurant = async (
     restaurantFormData: Restaurant
   ): Promise<Restaurant> => {
-    console.log(restaurantFormData, "Restar");
     const accessToken = await getAccessTokenSilently();
-
-    const menus = restaurantFormData.menuItems.map((menu) => ({
-      menu,
-    }));
-    console.log(menus, "Menu");
     const requestBody = {
       query: `mutation CreateRestaurant($restaurantName: String!,
 $city: String!,$country: String!,$deliveryPrice: Float!,

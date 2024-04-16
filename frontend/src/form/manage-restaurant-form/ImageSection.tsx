@@ -1,4 +1,5 @@
 import LoadingButton from "@/components/LoadingButton";
+import {AspectRatio} from "@/components/ui/aspect-ratio";
 import {Button} from "@/components/ui/button";
 import {
   FormControl,
@@ -13,19 +14,22 @@ import {useState} from "react";
 import {useFormContext} from "react-hook-form";
 
 export default function ImageSection() {
-  const {control, watch, setValue} = useFormContext();
+  const {control, watch, setValue, getValues} = useFormContext();
   const {uploadImageMutate, isLoading} = useUploadImage();
-  const image = watch("image");
+  const image = getValues("image");
+  const existingImageUrl = watch("imageUrl");
   const [imageUrl, setImageUrl] = useState();
+
   async function uploadImage() {
     try {
       const responsedImage = await uploadImageMutate(image);
       setImageUrl(responsedImage);
+      setValue("imageUrl", imageUrl);
     } catch (error) {
       console.log(error);
     }
   }
-  setValue("imageUrl", imageUrl);
+
   return (
     <div className="space-y-2">
       <div>
@@ -34,6 +38,17 @@ export default function ImageSection() {
           Add an image that will be displayed on your restaurant listing in the
           search results. Adding a new image will overwrite the existing one.
         </FormDescription>
+      </div>
+
+      <div className="flex flex-col gap-8 md:w-[50%]">
+        {(existingImageUrl || imageUrl) && (
+          <AspectRatio ratio={16 / 9}>
+            <img
+              src={existingImageUrl || imageUrl}
+              className="rounded-md object-cover h-full w-full"
+            />
+          </AspectRatio>
+        )}
       </div>
 
       <div className="flex flex-col gap-8 md:w-[50%]">
