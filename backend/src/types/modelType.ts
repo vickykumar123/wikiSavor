@@ -8,7 +8,7 @@ export interface User {
   country?: string;
   createdAt?: string;
 }
-interface Menu {
+export interface Menu {
   name: string;
   price: Number;
 }

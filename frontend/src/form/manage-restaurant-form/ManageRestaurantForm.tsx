@@ -6,14 +6,18 @@ import DetailSection from "./DetailSection";
 import {Separator} from "@/components/ui/separator";
 import CuisinesSection from "./CuisinesSection";
 import MenuSection from "./MenuSection";
+import ImageSection from "./ImageSection";
+import LoadingButton from "@/components/LoadingButton";
+import {Button} from "@/components/ui/button";
+import {Restaurant} from "@/types";
 
 type ManageRestaurantFormProps = {
-  onSave: (restaurantFormData: FormData) => void;
+  onSave: (restaurantFormData: Restaurant) => void;
   isLoading: boolean;
 };
 
 const formSchema = z.object({
-  resturantName: z.string({required_error: "Resturant name is requried"}),
+  restaurantName: z.string({required_error: "Resturant name is requried"}),
   city: z.string({required_error: "City is requried"}),
   country: z.string({required_error: "Country is requried"}),
   deliveryPrice: z.coerce.number({
@@ -33,16 +37,17 @@ const formSchema = z.object({
       price: z.coerce.number().min(1, "Price is required"),
     })
   ),
-  image: z.instanceof(File, {message: "image is required"}),
+  imageUrl: z.string({required_error: "Upload the image"}),
+  image: z.instanceof(File, {message: "Image is required"}),
 });
 
-type restaurantFormData = z.infer<typeof formSchema>;
+type RestaurantFormData = z.infer<typeof formSchema>;
 
 export default function ManageRestaurantForm({
   onSave,
   isLoading,
 }: ManageRestaurantFormProps) {
-  const form = useForm<restaurantFormData>({
+  const form = useForm<RestaurantFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       cuisines: [],
@@ -50,9 +55,9 @@ export default function ManageRestaurantForm({
     },
   });
 
-  const onSubmit = (formDataJson: restaurantFormData) => {
+  const onSubmit = (formDataJson: RestaurantFormData) => {
     console.log(formDataJson);
-    // TODO
+    onSave(formDataJson);
   };
 
   return (
@@ -67,6 +72,14 @@ export default function ManageRestaurantForm({
         <Separator />
         <MenuSection />
         <Separator />
+        <ImageSection />
+        {isLoading ? (
+          <LoadingButton />
+        ) : (
+          <Button type="submit" variant="submit">
+            Submit
+          </Button>
+        )}
       </form>
     </Form>
   );

@@ -16,7 +16,7 @@ export default function MobileNavLinks() {
       </Link>
       <Separator />
       <Link
-        to="/manage-resturant"
+        to="/manage-restaurant"
         className="font-bold text-lg flex items-center gap-3 text-orange-700 hover:text-orange-500"
       >
         <Hotel size={24} className="text-red-900" /> Manage Restaurant

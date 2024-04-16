@@ -1,4 +1,9 @@
-import {FormDescription, FormField, FormItem} from "@/components/ui/form";
+import {
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import {cuisineList} from "@/lib/restaurant-options";
 import {useFormContext} from "react-hook-form";
 import CuisineCheckbox from "./CuisineCheckbox";
@@ -18,6 +23,7 @@ export default function CuisinesSection() {
         name="cuisines"
         render={({field}) => (
           <FormItem>
+            <FormMessage />
             <div className="flex justify-start items-center flex-wrap gap-2 md:grid md:grid-cols-5">
               {cuisineList.map((cuisineItem) => (
                 <CuisineCheckbox

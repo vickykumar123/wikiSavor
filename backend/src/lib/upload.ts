@@ -9,6 +9,7 @@ export const upload = multer({
     bucket: process.env.AWS_BUCKET!,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
+      console.log(file);
       const fileName = `resturant/${req.userId}/${
         file.originalname.split(".")[0]
       }-${Date.now()}`;

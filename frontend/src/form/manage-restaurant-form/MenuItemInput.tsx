@@ -26,9 +26,7 @@ export default function MenuItemInput({
         name={`menuItems.${index}.name`}
         render={({field}) => (
           <FormItem>
-            <FormLabel className="flex items-center gap-1">
-              Name <FormMessage />
-            </FormLabel>
+            <FormLabel className="flex items-center gap-1">Name</FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -36,6 +34,7 @@ export default function MenuItemInput({
                 className="bg-white"
               />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -44,19 +43,20 @@ export default function MenuItemInput({
         name={`menuItems.${index}.price`}
         render={({field}) => (
           <FormItem>
-            <FormLabel className="flex items-center gap-1">
-              Price ($) <FormMessage />
-            </FormLabel>
+            <FormLabel className="flex items-center gap-1">Price ($)</FormLabel>
             <FormControl>
               <Input {...field} placeholder="8.00" className="bg-white" />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
-      <Trash2
-        onClick={removeMenuItem}
-        className="text-red-500 mt-4 cursor-pointer"
-      />
+      {index !== 0 && (
+        <Trash2
+          onClick={removeMenuItem}
+          className="text-red-500 mt-4 cursor-pointer"
+        />
+      )}
     </div>
   );
 }

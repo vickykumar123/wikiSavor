@@ -1,5 +1,6 @@
 import {buildSchema} from "graphql";
 export const schema = buildSchema(`
+scalar MenuInputs
 type User{
     _id:String!
     auth0Id:String!
@@ -22,9 +23,9 @@ type Restaurant{
   country: String!
   deliveryPrice: Float!
   estimatedDeliveryTime: Float!
-  cuisines: [String]
-  menuItems: [Menu]
-  imageUrl: String!
+  cuisines: [String]!
+  menuItems: [Menu]!
+  imageUrl: String
   lastUpdate: String
 }
 
@@ -40,10 +41,7 @@ input UpdateUserInput{
     city:String!
     country:String!
 }
-input MenuInput{
-    name:String!
-    price:Float!
-}
+
 
 input RestaurantInput{
     restaurantName: String!
@@ -51,9 +49,9 @@ input RestaurantInput{
     country: String!
     deliveryPrice: Float!
     estimatedDeliveryTime: Float!
-    cuisines: [String]
-    menuItems: MenuInput
-    imageUrl: String!
+    cuisines: [String]!
+    menuItems: [MenuInputs]
+    imageUrl: String
     lastUpdate: String
 }
 type RootQuery{
