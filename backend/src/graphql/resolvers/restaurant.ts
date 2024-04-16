@@ -52,4 +52,27 @@ export const restaurant = {
       throw new Error("Unable to create the restaurant");
     }
   },
+
+  getCurrentUserRestaurant: async (
+    _: any,
+    context: {req: Request; res: Response}
+  ) => {
+    try {
+      const {req, res} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
+
+      const restaurant = await Restaurant.findOne({user: req.userId}).populate(
+        "user"
+      );
+      if (!restaurant) {
+        throw new Error("Restaurant not found");
+      }
+      return restaurant;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Unable to get restaurant details");
+    }
+  },
 };

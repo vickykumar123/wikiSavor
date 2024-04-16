@@ -57,6 +57,7 @@ input RestaurantInput{
 type RootQuery{
     getCurrentUserInfo:User!
     deleteAccount:User!
+    getCurrentUserRestaurant:Restaurant!
 }
 
 type RootMutation{
