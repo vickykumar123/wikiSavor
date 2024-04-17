@@ -1,6 +1,8 @@
 import {Request, Response} from "express";
 import Restaurant from "../../models/restaurant";
 import {Restaurant as RestaurantType} from "../../types/modelType";
+import client from "../../redis/client";
+import {userRestaurantKey} from "../../redis/keys";
 
 export const restaurant = {
   createUserRestaurant: async (
@@ -62,13 +64,20 @@ export const restaurant = {
       if (!req.userId) {
         throw new Error("Unauthorized");
       }
-
-      const restaurant = await Restaurant.findOne({user: req.userId}).populate(
-        "user"
-      );
+      const restaurantCache = await client.get(userRestaurantKey(req.userId));
+      if (restaurantCache !== null && restaurantCache !== "null") {
+        return JSON.parse(restaurantCache!);
+      }
+      const restaurant = await Restaurant.findOne({
+        user: req.userId,
+      }).populate("user");
       if (!restaurant) {
         throw new Error("Restaurant not found");
       }
+      await client.set(
+        userRestaurantKey(req.userId),
+        JSON.stringify(restaurant)
+      );
       return restaurant;
     } catch (error) {
       console.log(error);
@@ -115,6 +124,7 @@ export const restaurant = {
         path: "menu",
         strictPopulate: false,
       });
+      await client.del(userRestaurantKey(req.userId));
       return fullRestaurant;
     } catch (error) {
       console.log(error);
