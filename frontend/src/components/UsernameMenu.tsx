@@ -16,7 +16,7 @@ export default function UsernameMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center px-3 font-bold text-orange-600 hover:text-orange-500 gap-2 outline-none">
         <img
-          src={user?.picture}
+          src={user!.picture}
           alt="profile pic"
           className="w-9 h-9 rounded-full"
         />

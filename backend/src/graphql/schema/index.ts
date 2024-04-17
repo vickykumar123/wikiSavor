@@ -29,6 +29,17 @@ type Restaurant{
   lastUpdate: String
 }
 
+type Pagination{
+    total:Int
+    page:Int
+    pages:Int
+}
+
+type SearchRestaurant{
+    data: [Restaurant]
+    pagination:Pagination
+}
+
 input CurrentUserInput{
     auth0Id:String!
     email:String!
@@ -58,6 +69,7 @@ type RootQuery{
     getCurrentUserInfo:User!
     deleteAccount:User!
     getCurrentUserRestaurant:Restaurant!
+    searchRestaurant:SearchRestaurant
 }
 
 type RootMutation{
