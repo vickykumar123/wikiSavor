@@ -22,7 +22,7 @@ export const allRestaurant = {
       query["city"] = new RegExp(city, "i");
       const cityCheck = await Restaurant.countDocuments(query);
       if (cityCheck === 0) {
-        return [];
+        return {data: [], pagination: {total: 0, page: 1, pages: 1}};
       }
       if (selectedCuisines) {
         const cuisineArray = selectedCuisines
