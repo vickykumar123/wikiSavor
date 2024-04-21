@@ -14,11 +14,19 @@ declare global {
   }
 }
 
-export const jwtCheck = auth({
-  audience: process.env.AUTH0_AUDIENCE,
-  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
-  tokenSigningAlg: "RS256",
-});
+export const jwtChecker = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    auth({
+      audience: process.env.AUTH0_AUDIENCE,
+      issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+      tokenSigningAlg: "RS256",
+    });
+    next();
+  } catch (err) {
+    console.log(err);
+    next();
+  }
+};
 
 export const verifyUser = async (
   req: Request,

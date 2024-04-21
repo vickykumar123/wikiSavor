@@ -8,11 +8,7 @@ export const allRestaurant = {
   ) => {
     try {
       const {req, res} = context;
-      if (!req.params) {
-        throw new Error("Params is required");
-      }
-      console.log(req.params);
-      const city = req.params.city;
+      const city = args.city;
       const searchQuery = (req.query.searchQuery as string) || "";
       const selectedCuisines = (req.query.selectedCuisines as string) || "";
       const sortOptions = (req.query.sortOptions as string) || "lastUpdate";
@@ -36,7 +32,7 @@ export const allRestaurant = {
         query["$or"] = [
           {restaurantName: searchRegex},
           {cuisines: {$in: [searchQuery]}},
-          {menuItems: {$eleMatch: {name: searchQuery}}},
+          {"menuItems.name": searchQuery},
         ];
       }
 

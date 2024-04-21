@@ -5,11 +5,13 @@ import {Button} from "../ui/button";
 import {Input} from "../ui/input";
 import {Form, FormControl, FormField, FormItem} from "../ui/form";
 import {Search} from "lucide-react";
+import {useEffect} from "react";
 
 interface SearchBarProps {
   onSubmit: (formData: SearchForm) => void;
   placeholder: string;
   onReset?: () => void;
+  searchQuery: string;
 }
 const formSchema = z.object({
   searchQuery: z.string({required_error: "Search input is requrired"}).min(1),
@@ -20,13 +22,18 @@ export default function SearchBar({
   onSubmit,
   placeholder,
   onReset,
+  searchQuery,
 }: SearchBarProps) {
   const form = useForm<SearchForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      searchQuery: "",
+      searchQuery,
     },
   });
+
+  useEffect(() => {
+    form.reset({searchQuery});
+  }, [form, searchQuery]);
 
   const handleReset = () => {
     form.reset({
@@ -66,7 +73,7 @@ export default function SearchBar({
           )}
         />
 
-        {form.formState.isDirty && (
+        {searchQuery && (
           <Button
             onClick={handleReset}
             type="button"

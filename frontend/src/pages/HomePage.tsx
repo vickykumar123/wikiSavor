@@ -21,7 +21,7 @@ export default function HomePage() {
           Food is just a click away!
         </span>
         <SearchBar
-          placeholder="Search by City or Town or Menu"
+          placeholder="Search by City or Town"
           onSubmit={handleSearchSubmit}
         />
       </div>

@@ -12,11 +12,13 @@ type User{
 }
 
 type Menu{
+    _id:String!
     name:String!
     price:Float!
 }
 
 type Restaurant{
+    _id:String!
     user: User!
   restaurantName: String!
   city: String!
@@ -69,7 +71,7 @@ type RootQuery{
     getCurrentUserInfo:User!
     deleteAccount:User!
     getCurrentUserRestaurant:Restaurant!
-    searchRestaurant:SearchRestaurant
+    searchRestaurant(city:String):SearchRestaurant
 }
 
 type RootMutation{

@@ -2,7 +2,7 @@ import express, {Express, Request, Response} from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import {jwtCheck, verifyUser} from "../middleware/auth";
+import {jwtChecker, verifyUser} from "../middleware/auth";
 import {upload} from "../lib/upload";
 import {uploadSingle} from "../controller/uploadController";
 import {createHandler} from "graphql-http/lib/use/express";
@@ -35,7 +35,7 @@ class Server {
       .catch((error) => console.log(error));
   }
   middleware() {
-    this.app.use(jwtCheck);
+    this.app.use(jwtChecker);
     this.app.use(verifyUser);
     this.app.post("/upload-single", upload.single("image"), uploadSingle);
   }
