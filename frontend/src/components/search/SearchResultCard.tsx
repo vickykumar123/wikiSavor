@@ -39,15 +39,16 @@ export default function SearchResultCard({restaurant}: SearchResultCardProps) {
         </div>
         <div id="card-content" className="grid md:grid-cols-2 gap-4">
           <div className="flex flex-wrap">
+            <p className="italic mr-2 mb-1 ">Tastes of : </p>
             {restaurant.cuisines.slice(0, 3).map((item, index) => (
               <span className="flex" key={index}>
                 <span className="capitalize bg-green-500 text-white w-full p-1 h-6 text-xs rounded-md">
                   {item}
                 </span>
-                {index < restaurant.cuisines.length - 2 && <Dot />}
+                {index < restaurant.cuisines.length - 1 && <Dot />}
               </span>
             ))}
-            <span className="ml-2  bg-green-500 text-white p-1 h-6 text-xs rounded-md">
+            <span className=" bg-green-500 text-white p-1 h-6 text-xs rounded-md">
               {restaurant.cuisines.length > 3 &&
                 `+${restaurant.cuisines.length - 3} more`}
             </span>

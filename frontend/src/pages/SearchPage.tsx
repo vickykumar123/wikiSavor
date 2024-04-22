@@ -13,20 +13,20 @@ export type SearchState = {
 
 export default function SearchPage() {
   const {city} = useParams();
-  const [searchState, setSearchState] = useState({seachQuery: ""});
-  const {results, isLoading} = useSearchRestaurant(city);
+  const [searchState, setSearchState] = useState({searchQuery: ""});
+  const {results, isLoading} = useSearchRestaurant(searchState, city);
 
   function setSearchQuery(searchFormData: SearchForm) {
     setSearchState((prevState) => ({
       ...prevState,
-      seachQuery: searchFormData.searchQuery,
+      searchQuery: searchFormData.searchQuery,
     }));
   }
 
   function resetSearch() {
     setSearchState((prevState) => ({
       ...prevState,
-      seachQuery: "",
+      searchQuery: "",
     }));
   }
 
@@ -45,7 +45,7 @@ export default function SearchPage() {
       <div id="cuisines-list">{/* TODo insert cuisines list */}</div>
       <div id="main-content" className="flex flex-col gap-5">
         <SearchBar
-          searchQuery={searchState.seachQuery}
+          searchQuery={searchState.searchQuery}
           placeholder="Search by cuisines or restaurant or menu"
           onSubmit={setSearchQuery}
           onReset={resetSearch}

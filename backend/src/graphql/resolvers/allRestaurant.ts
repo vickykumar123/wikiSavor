@@ -32,7 +32,7 @@ export const allRestaurant = {
         query["$or"] = [
           {restaurantName: searchRegex},
           {cuisines: {$in: [searchQuery]}},
-          {"menuItems.name": searchQuery},
+          {"menuItems.name": searchRegex},
         ];
       }
 
