@@ -10,6 +10,7 @@ export const useSearchRestaurant = (
   const createSearchRequest = async () => {
     const params = new URLSearchParams();
     params.set("searchQuery", searchState.searchQuery);
+    params.set("page", searchState.page.toString());
     const requestBody = {
       query: `query SearchRestaurant($city:String){
             searchRestaurant(city:$city){
