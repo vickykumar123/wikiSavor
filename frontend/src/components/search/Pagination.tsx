@@ -26,6 +26,7 @@ export default function PaginationPage({
     }
     return pageNumberArr;
   }, [pages]);
+
   return (
     <Pagination>
       <PaginationContent>
@@ -48,7 +49,7 @@ export default function PaginationPage({
             </PaginationLink>
           </PaginationItem>
         ))}
-        {page !== pageNumber.length && (
+        {page !== pageNumber.length && pageNumber.length !== 0 && (
           <PaginationItem>
             <PaginationNext href="#" onClick={() => onPageChange(page + 1)} />
           </PaginationItem>

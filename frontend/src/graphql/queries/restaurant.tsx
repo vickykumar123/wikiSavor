@@ -1,5 +1,4 @@
 import {API_URL} from "@/lib/contants";
-import {fetchApi} from "@/lib/fetchApi";
 import {SearchState} from "@/pages/SearchPage";
 import {useQuery} from "react-query";
 
@@ -11,6 +10,7 @@ export const useSearchRestaurant = (
     const params = new URLSearchParams();
     params.set("searchQuery", searchState.searchQuery);
     params.set("page", searchState.page.toString());
+    params.set("selectedCuisines", searchState.selectedCuisines.join(","));
     const requestBody = {
       query: `query SearchRestaurant($city:String){
             searchRestaurant(city:$city){

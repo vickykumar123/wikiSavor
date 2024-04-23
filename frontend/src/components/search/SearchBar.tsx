@@ -11,7 +11,7 @@ interface SearchBarProps {
   onSubmit: (formData: SearchForm) => void;
   placeholder: string;
   onReset?: () => void;
-  searchQuery: string;
+  searchQuery?: string;
 }
 const formSchema = z.object({
   searchQuery: z.string({required_error: "Search input is requrired"}).min(1),
@@ -65,7 +65,7 @@ export default function SearchBar({
               <FormControl>
                 <Input
                   {...field}
-                  className="border-none shadow-none md:text-lg focus-visible:ring-0 placeholder:italic"
+                  className="border-none shadow-none text-sm focus-visible:ring-0 placeholder:italic"
                   placeholder={placeholder}
                 />
               </FormControl>

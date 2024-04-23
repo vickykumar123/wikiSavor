@@ -2,13 +2,13 @@ import {Request, Response} from "express";
 import Restaurant from "../../models/restaurant";
 
 export const allRestaurant = {
-  searchRestaurant: async (
-    args: any,
-    context: {req: Request; res: Response}
-  ) => {
+  searchRestaurant: async (args: any, context: {req: Request}) => {
     try {
-      const {req, res} = context;
+      const {req} = context;
       const city = args.city;
+      if (!city) {
+        throw new Error("City is required");
+      }
       const searchQuery = (req.query.searchQuery as string) || "";
       const selectedCuisines = (req.query.selectedCuisines as string) || "";
       const sortOptions = (req.query.sortOptions as string) || "lastUpdate";
