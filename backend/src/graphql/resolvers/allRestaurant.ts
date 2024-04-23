@@ -1,4 +1,4 @@
-import {Request, Response} from "express";
+import {Request} from "express";
 import Restaurant from "../../models/restaurant";
 
 export const allRestaurant = {
@@ -56,6 +56,23 @@ export const allRestaurant = {
     } catch (error) {
       console.log(error);
       throw new Error("Unable to search by city.");
+    }
+  },
+
+  restaurantDetail: async ({restaurantId}: {restaurantId: string}) => {
+    try {
+      if (!restaurantId) {
+        throw new Error("Restaurant ID is required");
+      }
+
+      const restaurant = await Restaurant.findById(restaurantId);
+      if (!restaurant) {
+        throw new Error("Restaurant not found");
+      }
+      return restaurant;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Unable to get restaurant details");
     }
   },
 };

@@ -15,7 +15,6 @@ export const restaurant = {
   ) => {
     try {
       const {req, res} = context;
-      console.log(req.file);
       const {
         restaurantName,
         city,

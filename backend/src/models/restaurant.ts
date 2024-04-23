@@ -44,6 +44,7 @@ const restaurantSchema = new mongoose.Schema<RestaurantType>(
 );
 
 restaurantSchema.index({estimatedDeliveryTime: 1});
+restaurantSchema.index({deliveryPrice: 1});
 
 const Restaurant = mongoose.model<RestaurantType>(
   "Restaurant",

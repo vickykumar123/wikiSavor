@@ -1,4 +1,5 @@
 import {API_URL} from "@/lib/contants";
+import {fetchApi} from "@/lib/fetchApi";
 import {SearchState} from "@/pages/SearchPage";
 import {useQuery} from "react-query";
 
@@ -55,5 +56,46 @@ export const useSearchRestaurant = (
     createSearchRequest,
     {enabled: !!city}
   );
+  return {results, isLoading};
+};
+
+export const useGetRestaurantDetails = (restaurantId?: string) => {
+  const getRestaurantDetails = async () => {
+    const requestBody = {
+      query: `query RestaurantDetail($restaurantId:String!){
+        restaurantDetail(restaurantId:$restaurantId){
+          _id
+          restaurantName
+          city
+          country
+          deliveryPrice
+          estimatedDeliveryTime
+          cuisines
+          menuItems{
+            name
+            price
+          }
+          imageUrl
+        }
+      }`,
+      variables: {
+        restaurantId,
+      },
+    };
+
+    const response = await fetchApi(requestBody);
+    if (!response.ok) {
+      throw new Error("Unable to fetch the details");
+    }
+
+    const responseData = await response.json();
+    return responseData.data.restaurantDetail;
+  };
+
+  const {data: results, isLoading} = useQuery(
+    ["restaurantDetail"],
+    getRestaurantDetails
+  );
+
   return {results, isLoading};
 };

@@ -72,6 +72,7 @@ type RootQuery{
     deleteAccount:User!
     getCurrentUserRestaurant:Restaurant!
     searchRestaurant(city:String):SearchRestaurant
+    restaurantDetail(restaurantId:String!):Restaurant
 }
 
 type RootMutation{
