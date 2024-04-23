@@ -1,9 +1,9 @@
 import {cuisineList} from "@/lib/restaurant-options";
-import {Label} from "./ui/label";
+import {Label} from "../ui/label";
 import {Check, ChevronDown, ChevronUp} from "lucide-react";
 import {ChangeEvent} from "react";
-import {Button} from "./ui/button";
-import {ScrollArea} from "./ui/scroll-area";
+import {Button} from "../ui/button";
+import {ScrollArea} from "../ui/scroll-area";
 
 interface CuisineFilterProps {
   onChange: (cuisines: string[]) => void;

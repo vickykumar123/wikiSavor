@@ -11,7 +11,7 @@ export const allRestaurant = {
       }
       const searchQuery = (req.query.searchQuery as string) || "";
       const selectedCuisines = (req.query.selectedCuisines as string) || "";
-      const sortOptions = (req.query.sortOptions as string) || "lastUpdate";
+      const sortOption = (req.query.sortOption as string) || "lastUpdate";
       const page = parseInt(req.query.page as string) || 1;
 
       let query: any = {};
@@ -39,7 +39,7 @@ export const allRestaurant = {
       const pageSize = 10;
       const skip = (page - 1) * pageSize;
       const restaurant = await Restaurant.find(query)
-        .sort({[sortOptions]: 1})
+        .sort({[sortOption]: 1})
         .skip(skip)
         .limit(pageSize)
         .lean();
