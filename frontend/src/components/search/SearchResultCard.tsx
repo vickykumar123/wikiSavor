@@ -2,6 +2,7 @@ import {Restaurant} from "@/types";
 import {Link} from "react-router-dom";
 import {CircleDollarSignIcon, Clock, Dot, LandPlot, MapPin} from "lucide-react";
 import {AspectRatio} from "../ui/aspect-ratio";
+import {Button} from "../ui/button";
 
 type SearchResultCardProps = {
   restaurant: Restaurant;
@@ -18,7 +19,7 @@ export default function SearchResultCard({restaurant}: SearchResultCardProps) {
           className="rounded-md w-full h-full object-cover"
         />
       </AspectRatio>
-      <div>
+      <div className="relative">
         <h3 className="text-2xl font-extrabold tracking-tight mb-2 group-hover:underline uppercase line-clamp-1">
           {restaurant.restaurantName}
         </h3>
@@ -57,6 +58,12 @@ export default function SearchResultCard({restaurant}: SearchResultCardProps) {
             </div>
           </div>
         </div>
+        <Button
+          variant="submit"
+          className="md:absolute md:right-36 md:bottom-0 md:mb-2 mt-2 w-full md:w-40"
+        >
+          Order now
+        </Button>
       </div>
     </Link>
   );

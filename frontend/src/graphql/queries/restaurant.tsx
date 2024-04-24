@@ -1,6 +1,7 @@
 import {API_URL} from "@/lib/contants";
 import {fetchApi} from "@/lib/fetchApi";
 import {SearchState} from "@/pages/SearchPage";
+import {Restaurant} from "@/types";
 import {useQuery} from "react-query";
 
 export const useSearchRestaurant = (
@@ -60,7 +61,7 @@ export const useSearchRestaurant = (
 };
 
 export const useGetRestaurantDetails = (restaurantId?: string) => {
-  const getRestaurantDetails = async () => {
+  const getRestaurantDetails = async (): Promise<Restaurant> => {
     const requestBody = {
       query: `query RestaurantDetail($restaurantId:String!){
         restaurantDetail(restaurantId:$restaurantId){
@@ -94,7 +95,10 @@ export const useGetRestaurantDetails = (restaurantId?: string) => {
 
   const {data: results, isLoading} = useQuery(
     ["restaurantDetail"],
-    getRestaurantDetails
+    getRestaurantDetails,
+    {
+      enabled: !!restaurantId,
+    }
   );
 
   return {results, isLoading};
