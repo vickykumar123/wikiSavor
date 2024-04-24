@@ -73,6 +73,7 @@ export const useGetRestaurantDetails = (restaurantId?: string) => {
           estimatedDeliveryTime
           cuisines
           menuItems{
+            _id
             name
             price
           }

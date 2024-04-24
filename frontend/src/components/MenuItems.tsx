@@ -4,7 +4,7 @@ import {Button} from "./ui/button";
 
 type Props = {
   menuItem: MenuItem;
-  addToCart?: () => void;
+  addToCart: (menuItem: MenuItem) => void;
 };
 
 const MenuItems = ({menuItem, addToCart}: Props) => {
@@ -15,7 +15,7 @@ const MenuItems = ({menuItem, addToCart}: Props) => {
           <CardTitle>{menuItem.name}</CardTitle>
           <span>${menuItem.price.toFixed(2)}</span>
         </div>
-        <Button variant="submit" onClick={addToCart}>
+        <Button variant="submit" onClick={() => addToCart(menuItem)}>
           Add to Cart
         </Button>
       </CardContent>

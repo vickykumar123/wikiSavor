@@ -1,9 +1,13 @@
 import MenuItems from "@/components/MenuItems";
+import OrderSummary from "@/components/OrderSummary";
 import RestaurantInfo from "@/components/RestaurantInfo";
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import {Button} from "@/components/ui/button";
+import {Card} from "@/components/ui/card";
 import {useGetRestaurantDetails} from "@/graphql/queries/restaurant";
+import {CartItem, MenuItem} from "@/types";
 import {Loader2} from "lucide-react";
+import {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 
 export default function RestaurantDetail() {
@@ -11,6 +15,45 @@ export default function RestaurantDetail() {
   const {restaurantId} = useParams();
   const {results: restaurant, isLoading} =
     useGetRestaurantDetails(restaurantId);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  const addToCart = (menuItems: MenuItem) => {
+    setCartItems((prevState) => {
+      const hasExistingItem = cartItems.find(
+        (item) => item._id === menuItems._id
+      );
+
+      let updateCartItems;
+      if (hasExistingItem) {
+        updateCartItems = prevState.map((cartItem) =>
+          cartItem._id === menuItems._id
+            ? {...cartItem, quantity: cartItem.quantity + 1}
+            : cartItem
+        );
+      } else {
+        updateCartItems = [
+          ...prevState,
+          {
+            _id: menuItems._id,
+            name: menuItems.name,
+            price: menuItems.price,
+            quantity: 1,
+          },
+        ];
+      }
+
+      return updateCartItems;
+    });
+  };
+
+  const removeFromCart = (cartItem: CartItem) => {
+    setCartItems((prevState) => {
+      const updatedCartItems = prevState.filter(
+        (item) => cartItem._id !== item._id
+      );
+      return updatedCartItems;
+    });
+  };
 
   if (isLoading || !restaurant) {
     return <Loader2 size={40} className="animate-spin text-orange-500" />;
@@ -36,8 +79,21 @@ export default function RestaurantDetail() {
             <RestaurantInfo restaurant={restaurant} />
             <span className="text-2xl font-bold tracking-tight">Menu</span>
             {restaurant.menuItems.map((menuItem) => (
-              <MenuItems menuItem={menuItem} />
+              <MenuItems
+                key={menuItem._id}
+                menuItem={menuItem}
+                addToCart={addToCart}
+              />
             ))}
+          </div>
+          <div>
+            <Card className="shadow-md">
+              <OrderSummary
+                restaurant={restaurant}
+                cartItems={cartItems}
+                removeFromCart={removeFromCart}
+              />
+            </Card>
           </div>
         </div>
       </div>
