@@ -1,8 +1,8 @@
 import {CartItem, Restaurant} from "@/types";
-import {CardContent, CardHeader, CardTitle} from "./ui/card";
-import {Badge} from "./ui/badge";
+import {CardContent, CardHeader, CardTitle} from "../ui/card";
+import {Badge} from "../ui/badge";
 import {Trash} from "lucide-react";
-import {Separator} from "./ui/separator";
+import {Separator} from "../ui/separator";
 
 interface Props {
   restaurant: Restaurant;
