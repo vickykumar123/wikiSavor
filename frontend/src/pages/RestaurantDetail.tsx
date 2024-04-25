@@ -1,9 +1,11 @@
+import CheckoutButton from "@/components/CheckoutButton";
 import MenuItems from "@/components/MenuItems";
 import OrderSummary from "@/components/OrderSummary";
 import RestaurantInfo from "@/components/RestaurantInfo";
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import {Button} from "@/components/ui/button";
-import {Card} from "@/components/ui/card";
+import {Card, CardFooter} from "@/components/ui/card";
+import {UserFormData} from "@/form/UserProfileForm";
 import {useGetRestaurantDetails} from "@/graphql/queries/restaurant";
 import {CartItem, MenuItem} from "@/types";
 import {Loader2} from "lucide-react";
@@ -15,7 +17,10 @@ export default function RestaurantDetail() {
   const {restaurantId} = useParams();
   const {results: restaurant, isLoading} =
     useGetRestaurantDetails(restaurantId);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const storedCartItem = sessionStorage.getItem(`cartItems:${restaurantId}`);
+    return storedCartItem ? JSON.parse(storedCartItem) : [];
+  });
 
   const addToCart = (menuItems: MenuItem) => {
     setCartItems((prevState) => {
@@ -41,7 +46,10 @@ export default function RestaurantDetail() {
           },
         ];
       }
-
+      sessionStorage.setItem(
+        `cartItems:${restaurantId}`,
+        JSON.stringify(updateCartItems)
+      );
       return updateCartItems;
     });
   };
@@ -51,8 +59,16 @@ export default function RestaurantDetail() {
       const updatedCartItems = prevState.filter(
         (item) => cartItem._id !== item._id
       );
+      sessionStorage.setItem(
+        `cartItems:${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
       return updatedCartItems;
     });
+  };
+
+  const onCheckout = (userFormData: UserFormData) => {
+    console.log("User data", userFormData);
   };
 
   if (isLoading || !restaurant) {
@@ -93,6 +109,12 @@ export default function RestaurantDetail() {
                 cartItems={cartItems}
                 removeFromCart={removeFromCart}
               />
+              <CardFooter>
+                <CheckoutButton
+                  disabled={cartItems.length === 0}
+                  onCheckout={onCheckout}
+                />
+              </CardFooter>
             </Card>
           </div>
         </div>

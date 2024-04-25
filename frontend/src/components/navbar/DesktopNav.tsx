@@ -5,7 +5,7 @@ import {Loader2} from "lucide-react";
 import {memo} from "react";
 
 const DesktopNav = () => {
-  const {loginWithRedirect, isAuthenticated, isLoading} = useAuth0();
+  const {isAuthenticated, isLoading, loginWithPopup} = useAuth0();
   if (isLoading) return <Loader2 className="animate-spin text-orange-500" />;
   return (
     <div>
@@ -16,7 +16,7 @@ const DesktopNav = () => {
         <Button
           variant="ghost"
           className="bg-orange-500 text-white"
-          onClick={async () => await loginWithRedirect()}
+          onClick={async () => await loginWithPopup()}
         >
           Log In
         </Button>

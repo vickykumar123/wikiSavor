@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import Restaurant from "../../models/restaurant";
 import {Restaurant as RestaurantType} from "../../types/modelType";
 import client from "../../redis/client";
-import {userRestaurantKey} from "../../redis/keys";
+import {restaurantDetailKey, userRestaurantKey} from "../../redis/keys";
 
 export const restaurant = {
   createUserRestaurant: async (
@@ -124,6 +124,7 @@ export const restaurant = {
         strictPopulate: false,
       });
       await client.del(userRestaurantKey(req.userId));
+      await client.del(restaurantDetailKey(restaurant._id.toString()));
       return fullRestaurant;
     } catch (error) {
       console.log(error);

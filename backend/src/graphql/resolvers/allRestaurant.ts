@@ -1,5 +1,7 @@
 import {Request} from "express";
 import Restaurant from "../../models/restaurant";
+import client from "../../redis/client";
+import {restaurantDetailKey} from "../../redis/keys";
 
 export const allRestaurant = {
   searchRestaurant: async (args: any, context: {req: Request}) => {
@@ -52,6 +54,7 @@ export const allRestaurant = {
           pages: Math.ceil(total / pageSize),
         },
       };
+
       return result;
     } catch (error) {
       console.log(error);
@@ -64,11 +67,21 @@ export const allRestaurant = {
       if (!restaurantId) {
         throw new Error("Restaurant ID is required");
       }
+      const restaurantDetailCache = await client.get(
+        restaurantDetailKey(restaurantId)
+      );
 
+      if (restaurantDetailCache !== null && restaurantDetailCache !== "null") {
+        return JSON.parse(restaurantDetailCache);
+      }
       const restaurant = await Restaurant.findById(restaurantId);
       if (!restaurant) {
         throw new Error("Restaurant not found");
       }
+      await client.set(
+        restaurantDetailKey(restaurantId),
+        JSON.stringify(restaurant)
+      );
       return restaurant;
     } catch (error) {
       console.log(error);
