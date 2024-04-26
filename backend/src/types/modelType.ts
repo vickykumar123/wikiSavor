@@ -26,3 +26,23 @@ export interface Restaurant {
   imageUrl: string;
   lastUpdate: Date | string;
 }
+
+export interface Order {
+  restaurant: Restaurant;
+  user: User;
+  deliveryDetails: {
+    email: string;
+    name: string;
+    addressLine1: string;
+    city: string;
+    country: string;
+  };
+  cartItems: {
+    menuItemsId: string;
+    quantity: string;
+    name: string;
+  }[];
+  totalAmount: number;
+  status: "placed" | "paid" | "inProgress" | "outForDelivery" | "delivered";
+  createdAt: string | Date;
+}
