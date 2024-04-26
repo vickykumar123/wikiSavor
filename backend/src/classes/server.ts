@@ -8,6 +8,7 @@ import {uploadSingle} from "../controller/uploadController";
 import {createHandler} from "graphql-http/lib/use/express";
 import {schema} from "../graphql/schema";
 import {resolver} from "../graphql/resolvers";
+import {orderCheckoutWebhook} from "../controller/orderCheckout";
 
 class Server {
   private app: Express;
@@ -16,6 +17,7 @@ class Server {
   }
 
   config() {
+    this.app.use("/api/order/checkout/webhook", express.raw({type: "*/*"}));
     this.app.use(express.json());
     this.app.use(express.urlencoded({extended: true}));
     this.app.use(cors({origin: process.env.FRONTEND_URL, credentials: true}));
@@ -53,6 +55,9 @@ class Server {
     this.app.get("/health", async (req: Request, res: Response) => {
       res.send({message: "health OK!"});
     });
+  }
+  stripeWebhook() {
+    this.app.post("/api/order/checkout/webhook", orderCheckoutWebhook);
   }
 }
 

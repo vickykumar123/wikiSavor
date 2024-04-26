@@ -35,6 +35,7 @@ export const order = {
       if (!user || !restaurant) {
         throw new Error("Restaurant or User not found");
       }
+      // Creating the new Order.
       const newOrder = new Order({
         restaurant: restaurant,
         user: req.userId,
@@ -61,9 +62,8 @@ export const order = {
       if (!session.url) {
         throw new Error("Error creating stripe session");
       }
-      // Creating the new Order.
 
-      newOrder.save();
+      await newOrder.save();
       return {url: session.url};
     } catch (error) {
       console.log(error);

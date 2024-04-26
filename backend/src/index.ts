@@ -10,4 +10,5 @@ server.connect();
 server.healthCheck();
 app.get("/playground", expressPlayground({endpoint: "/graphql"}));
 server.middleware();
+server.stripeWebhook();
 server.graphql();
