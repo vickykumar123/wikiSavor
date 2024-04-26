@@ -15,6 +15,9 @@ export const restaurant = {
   ) => {
     try {
       const {req, res} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
       const {
         restaurantName,
         city,
@@ -94,6 +97,9 @@ export const restaurant = {
   ) => {
     try {
       const {req, res} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
       const {
         restaurantName,
         city,

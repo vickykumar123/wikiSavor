@@ -1,6 +1,7 @@
 import {buildSchema} from "graphql";
 export const schema = buildSchema(`
 scalar MenuInputs
+scalar CartItem
 type User{
     _id:String!
     auth0Id:String!
@@ -42,6 +43,10 @@ type SearchRestaurant{
     pagination:Pagination
 }
 
+type Checkout{
+    url:String
+}
+
 input CurrentUserInput{
     auth0Id:String!
     email:String!
@@ -67,6 +72,11 @@ input RestaurantInput{
     imageUrl: String
     lastUpdate: String
 }
+
+input CheckoutInput{
+    cartItems:[CartItem]
+    restaurantId:String!
+}
 type RootQuery{
     getCurrentUserInfo:User!
     deleteAccount:User!
@@ -80,6 +90,7 @@ type RootMutation{
     updateCurrentUser(updateUserInput:UpdateUserInput):User
     createUserRestaurant(restaurantInput:RestaurantInput):Restaurant
     updateCurrentUserRestaurant(restaurantInput:RestaurantInput):Restaurant
+    createCheckoutSession(checkout:CheckoutInput):Checkout
 }
 
 schema{

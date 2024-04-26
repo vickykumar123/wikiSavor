@@ -9,8 +9,9 @@ export interface User {
   createdAt?: string;
 }
 export interface Menu {
+  _id: string;
   name: string;
-  price: Number;
+  price: number;
 }
 
 export interface Restaurant {
@@ -21,7 +22,7 @@ export interface Restaurant {
   deliveryPrice: number;
   estimatedDeliveryTime: number;
   cuisines: string[];
-  menuItems: Menu;
+  menuItems: Menu[];
   imageUrl: string;
   lastUpdate: Date | string;
 }
