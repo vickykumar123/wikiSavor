@@ -28,13 +28,13 @@ export default function RestaurantDetail() {
   const addToCart = (menuItems: MenuItem) => {
     setCartItems((prevState) => {
       const hasExistingItem = cartItems.find(
-        (item) => item._id === menuItems._id
+        (item) => item._id === menuItems?._id
       );
 
       let updateCartItems;
       if (hasExistingItem) {
         updateCartItems = prevState.map((cartItem) =>
-          cartItem._id === menuItems._id
+          cartItem._id === menuItems?._id
             ? {...cartItem, quantity: cartItem.quantity + 1}
             : cartItem
         );
@@ -42,7 +42,7 @@ export default function RestaurantDetail() {
         updateCartItems = [
           ...prevState,
           {
-            _id: menuItems._id,
+            _id: menuItems._id!,
             name: menuItems.name,
             price: menuItems.price,
             quantity: 1,
