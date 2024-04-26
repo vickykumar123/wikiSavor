@@ -8,11 +8,13 @@ import {useGetCurrentUser} from "@/graphql/queries/currentUser";
 interface CheckoutButtonProps {
   onCheckout: (userFormData: UserFormData) => void;
   disabled: boolean;
+  isLoading: boolean;
 }
 
 export default function CheckoutButton({
   onCheckout,
   disabled,
+  isLoading,
 }: CheckoutButtonProps) {
   const {
     isAuthenticated,
@@ -31,7 +33,7 @@ export default function CheckoutButton({
       </Button>
     );
   }
-  if (isAuthLoading || !currentUserData) {
+  if (isAuthLoading || !currentUserData || isLoading) {
     return <LoadingButton />;
   }
   return (

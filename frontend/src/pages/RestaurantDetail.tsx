@@ -5,18 +5,21 @@ import RestaurantInfo from "@/components/RestaurantInfo";
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import {Button} from "@/components/ui/button";
 import {Card, CardFooter} from "@/components/ui/card";
-import {UserFormData} from "@/form/UserProfileForm";
 import {useGetRestaurantDetails} from "@/graphql/queries/restaurant";
 import {CartItem, MenuItem} from "@/types";
 import {Loader2} from "lucide-react";
 import {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
+import {useCreateCheckoutSession} from "@/graphql/queries/order";
 
 export default function RestaurantDetail() {
   const navigate = useNavigate();
   const {restaurantId} = useParams();
-  const {results: restaurant, isLoading} =
+  const {results: restaurant, isLoading: GetRestaurantLoading} =
     useGetRestaurantDetails(restaurantId);
+  const {createCheckSession, isLoading: CreateCheckoutLoading} =
+    useCreateCheckoutSession();
+
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItem = sessionStorage.getItem(`cartItems:${restaurantId}`);
     return storedCartItem ? JSON.parse(storedCartItem) : [];
@@ -67,11 +70,23 @@ export default function RestaurantDetail() {
     });
   };
 
-  const onCheckout = (userFormData: UserFormData) => {
-    console.log("User data", userFormData);
+  const onCheckout = async () => {
+    if (!restaurant) {
+      return;
+    }
+    const checkoutData = {
+      cartItems: cartItems.map((cartItem) => ({
+        menuItemId: cartItem._id,
+        name: cartItem.name,
+        quantity: cartItem.quantity.toString(),
+      })),
+      restaurantId: restaurant._id!,
+    };
+    const data = await createCheckSession(checkoutData);
+    window.location.href = data.url;
   };
 
-  if (isLoading || !restaurant) {
+  if (GetRestaurantLoading || !restaurant) {
     return <Loader2 size={40} className="animate-spin text-orange-500" />;
   }
   return (
@@ -84,7 +99,7 @@ export default function RestaurantDetail() {
         &lt;- Back to List
       </Button>
       <div className="flex flex-col gap-10">
-        <AspectRatio ratio={16 / 7}>
+        <AspectRatio ratio={14 / 6}>
           <img
             src={restaurant.imageUrl}
             className="rounded-md object-cover h-full w-full"
@@ -111,8 +126,9 @@ export default function RestaurantDetail() {
               />
               <CardFooter>
                 <CheckoutButton
-                  disabled={cartItems.length === 0}
+                  disabled={cartItems.length === 0 || CreateCheckoutLoading}
                   onCheckout={onCheckout}
+                  isLoading={CreateCheckoutLoading}
                 />
               </CardFooter>
             </Card>

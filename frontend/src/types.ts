@@ -31,3 +31,12 @@ export type CartItem = {
   price: number;
   quantity: number;
 };
+
+export type CheckoutSessionRequest = {
+  cartItems: {
+    menuItemId: string;
+    name: string;
+    quantity: string;
+  }[];
+  restaurantId: string;
+};
