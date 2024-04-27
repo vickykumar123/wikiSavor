@@ -43,8 +43,8 @@ export default function CuisineFilter({
           Reset Filters
         </div>
       </div>
-      <ScrollArea className="md:h-screen">
-        <div className="space-y-2 flex md:flex-col flex-wrap gap-1">
+      <ScrollArea className="lg:h-screen">
+        <div className="space-y-2 flex lg:flex-col flex-wrap gap-1">
           {cuisineList
             .slice(0, isExpanded ? cuisineList.length : 7)
             .map((cuisine) => {

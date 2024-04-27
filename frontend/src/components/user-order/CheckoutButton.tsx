@@ -28,7 +28,11 @@ export default function CheckoutButton({
 
   if (!isAuthenticated) {
     return (
-      <Button variant="submit" className="w-full" onClick={onLogin}>
+      <Button
+        variant="submit"
+        className="w-full chekout-without-login"
+        onClick={onLogin}
+      >
         Login to check out
       </Button>
     );
