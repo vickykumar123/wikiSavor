@@ -1,7 +1,7 @@
 import {fetchApi} from "@/lib/fetchApi";
-import {CheckoutSessionRequest} from "@/types";
+import {CheckoutSessionRequest, Order} from "@/types";
 import {useAuth0} from "@auth0/auth0-react";
-import {useMutation} from "react-query";
+import {useMutation, useQuery} from "react-query";
 import {toast} from "sonner";
 
 export const useCreateCheckoutSession = () => {
@@ -39,12 +39,56 @@ export const useCreateCheckoutSession = () => {
     mutateAsync: createCheckSession,
     isLoading,
     isError,
-    reset,
   } = useMutation(createCheckoutSession);
 
   if (isError) {
     toast.error("Unable to create the checkout session");
   }
 
-  return {createCheckSession, isLoading, reset};
+  return {createCheckSession, isLoading};
+};
+
+export const useGetCurrentUserOrder = () => {
+  const {getAccessTokenSilently} = useAuth0();
+  const getCurrentUserOrder = async (): Promise<Order[]> => {
+    const accessToken = await getAccessTokenSilently();
+    const requestBody = {
+      query: `query GetCurrentUserOrder{
+        getCurrentUserOrder{
+          _id
+          restaurant{
+            restaurantName
+            estimatedDeliveryTime
+            imageUrl
+          }
+          user{
+            name
+          }
+          deliveryDetails{
+            addressLine1
+            city
+            country
+          }
+          cartItems{
+            name
+            quantity
+          }
+          totalAmount
+          status
+          createdAt
+        }
+      }`,
+    };
+    const response = await fetchApi(requestBody, accessToken);
+    if (!response.ok) {
+      throw new Error("Unable to fetch the user order");
+    }
+    const responseData = await response.json();
+    return responseData.data.getCurrentUserOrder;
+  };
+  const {data: userOrders, isLoading} = useQuery(
+    "currentUserOrders",
+    getCurrentUserOrder
+  );
+  return {userOrders, isLoading};
 };

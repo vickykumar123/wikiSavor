@@ -7,6 +7,7 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 import SearchPage from "./pages/SearchPage";
 import RestaurantDetail from "./pages/RestaurantDetail";
+import OrderStatusPage from "./pages/OrderStatusPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/user-profile" element={<UserProfilePage />} />
           <Route path="/manage-restaurant" element={<ManageRestaurantPage />} />
+          <Route path="/order-status" element={<OrderStatusPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Route>

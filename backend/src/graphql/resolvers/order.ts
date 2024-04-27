@@ -21,10 +21,10 @@ export const order = {
     }: {
       checkout: CheckoutSessionRequest;
     },
-    context: {req: Request; res: Response}
+    context: {req: Request}
   ) => {
     try {
-      const {req, res} = context;
+      const {req} = context;
       if (!req.userId) {
         throw new Error("Unauthorized");
       }
@@ -68,6 +68,23 @@ export const order = {
     } catch (error) {
       console.log(error);
       throw new Error("Unable to create checkout session");
+    }
+  },
+
+  getCurrentUserOrder: async (_: any, context: {req: Request}) => {
+    try {
+      const {req} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
+      const orders = await Order.find({user: req.userId})
+        .populate("restaurant")
+        .populate("user")
+        .sort({createdAt: -1});
+      return orders;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Unable to get the current user order");
     }
   },
 };

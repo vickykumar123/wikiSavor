@@ -1,6 +1,6 @@
 import {useAuth0} from "@auth0/auth0-react";
 import {Button} from "../ui/button";
-import LoadingButton from "../LoadingButton";
+import LoadingButton from "../custom_button/LoadingButton";
 import {Dialog, DialogContent, DialogTrigger} from "../ui/dialog";
 import UserProfileForm, {UserFormData} from "@/form/UserProfileForm";
 import {useGetCurrentUser} from "@/graphql/queries/currentUser";

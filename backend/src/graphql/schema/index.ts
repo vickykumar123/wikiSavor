@@ -47,6 +47,23 @@ type Checkout{
     url:String
 }
 
+type CartItems{
+    menuItemsId:String
+    quantity:String
+    name:String
+}
+
+type Order{
+    _id:String
+    restaurant:Restaurant
+    user:User
+    deliveryDetails:User
+    cartItems:[CartItems]
+    totalAmount:Float
+    status:String
+    createdAt:String
+}
+
 input CurrentUserInput{
     auth0Id:String!
     email:String!
@@ -83,6 +100,7 @@ type RootQuery{
     getCurrentUserRestaurant:Restaurant!
     searchRestaurant(city:String):SearchRestaurant
     restaurantDetail(restaurantId:String!):Restaurant
+    getCurrentUserOrder:[Order]
 }
 
 type RootMutation{

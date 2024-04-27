@@ -1,5 +1,5 @@
-import {DeleteButton} from "@/components/DeleteButton";
-import LoadingButton from "@/components/LoadingButton";
+import {DeleteButton} from "@/components/custom_button/DeleteButton";
+import LoadingButton from "@/components/custom_button/LoadingButton";
 import {Button} from "@/components/ui/button";
 import {
   Form,

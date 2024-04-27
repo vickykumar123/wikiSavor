@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 import {Dot, LandPlot, MapPin} from "lucide-react";
 
 interface Props {

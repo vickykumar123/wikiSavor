@@ -1,4 +1,4 @@
-import LoadingButton from "@/components/LoadingButton";
+import LoadingButton from "@/components/custom_button/LoadingButton";
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import {Button} from "@/components/ui/button";
 import {

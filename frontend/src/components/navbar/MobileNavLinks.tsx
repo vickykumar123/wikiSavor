@@ -16,6 +16,13 @@ export default function MobileNavLinks() {
       </Link>
       <Separator />
       <Link
+        to="/order-status"
+        className="font-bold text-lg flex items-center gap-3 text-orange-700 hover:text-orange-500"
+      >
+        <User size={24} className="text-red-900" /> My Orders
+      </Link>
+      <Separator />
+      <Link
         to="/manage-restaurant"
         className="font-bold text-lg flex items-center gap-3 text-orange-700 hover:text-orange-500"
       >

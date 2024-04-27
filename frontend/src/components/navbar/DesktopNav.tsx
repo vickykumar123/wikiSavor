@@ -2,15 +2,25 @@ import {useAuth0} from "@auth0/auth0-react";
 import {Button} from "../ui/button";
 import UsernameMenu from "../UsernameMenu";
 import {Loader2} from "lucide-react";
-import {memo} from "react";
+import {Link} from "react-router-dom";
 
 const DesktopNav = () => {
   const {isAuthenticated, isLoading, loginWithPopup} = useAuth0();
   if (isLoading) return <Loader2 className="animate-spin text-orange-500" />;
   return (
     <div>
-      <span className="flex space-x-2 items-center authenticated">
-        {isAuthenticated && <UsernameMenu />}
+      <span className="flex space-x-4 items-center authenticated">
+        {isAuthenticated && (
+          <>
+            <Link
+              to="/order-status"
+              className="font-semibold text-orange-600 hover:opacity-85 hover:underline "
+            >
+              My Orders
+            </Link>
+            <UsernameMenu />
+          </>
+        )}
       </span>
       {!isAuthenticated && (
         <Button
@@ -24,4 +34,4 @@ const DesktopNav = () => {
     </div>
   );
 };
-export default memo(DesktopNav);
+export default DesktopNav;

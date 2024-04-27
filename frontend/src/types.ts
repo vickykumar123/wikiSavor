@@ -40,3 +40,31 @@ export type CheckoutSessionRequest = {
   }[];
   restaurantId: string;
 };
+
+export type OrderStatus =
+  | "placed"
+  | "paid"
+  | "inProgress"
+  | "outForDelivery"
+  | "delivered";
+
+export type Order = {
+  _id: string;
+  restaurant: Restaurant;
+  user: User;
+  deliveryDetails: {
+    email: string;
+    name: string;
+    addressLine1: string;
+    city: string;
+    country: string;
+  };
+  cartItems: {
+    menuItemsId: string;
+    quantity: string;
+    name: string;
+  }[];
+  totalAmount: number;
+  status: OrderStatus;
+  createdAt: string | Date;
+};

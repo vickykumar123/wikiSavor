@@ -1,7 +1,7 @@
 import CheckoutButton from "@/components/user-order/CheckoutButton";
-import MenuItems from "@/components/MenuItems";
+import MenuItems from "@/components/restaurant/MenuItems";
 import OrderSummary from "@/components/user-order/OrderSummary";
-import RestaurantInfo from "@/components/RestaurantInfo";
+import RestaurantInfo from "@/components/restaurant/RestaurantInfo";
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import {Button} from "@/components/ui/button";
 import {Card, CardFooter} from "@/components/ui/card";

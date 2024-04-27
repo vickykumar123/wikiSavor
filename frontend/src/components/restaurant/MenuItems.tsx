@@ -1,6 +1,6 @@
 import {MenuItem} from "@/types";
-import {Card, CardContent, CardTitle} from "./ui/card";
-import {Button} from "./ui/button";
+import {Card, CardContent, CardTitle} from "../ui/card";
+import {Button} from "../ui/button";
 
 type Props = {
   menuItem: MenuItem;
