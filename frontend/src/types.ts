@@ -68,3 +68,8 @@ export type Order = {
   status: OrderStatus;
   createdAt: string | Date;
 };
+
+export type UpdateOrderStatus = {
+  orderId: string;
+  status: OrderStatus;
+};

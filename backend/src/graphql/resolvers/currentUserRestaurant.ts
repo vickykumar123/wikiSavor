@@ -170,4 +170,36 @@ export const restaurant = {
       throw new Error("Unable to fetch the order");
     }
   },
+
+  updateOrderStatus: async (
+    {
+      orderId,
+      status,
+    }: {
+      orderId: string;
+      status: "placed" | "paid" | "inProgress" | "outForDelivery" | "delivered";
+    },
+    context: {req: Request}
+  ) => {
+    try {
+      const {req} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
+
+      const order = await Order.findById(orderId);
+      if (!order) {
+        throw new Error("No orders found");
+      }
+      const restaurant = await Restaurant.findById(order.restaurant);
+      if (restaurant?.user._id.toString() !== req.userId) {
+        throw new Error("You are not allowed to make changes");
+      }
+      order.status = status;
+      await order.save();
+      return order;
+    } catch (error) {
+      console.log("Unable to update the order");
+    }
+  },
 };

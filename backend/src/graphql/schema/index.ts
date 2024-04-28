@@ -110,6 +110,7 @@ type RootMutation{
     createUserRestaurant(restaurantInput:RestaurantInput):Restaurant
     updateCurrentUserRestaurant(restaurantInput:RestaurantInput):Restaurant
     createCheckoutSession(checkout:CheckoutInput):Checkout
+    updateOrderStatus(orderId:String!, status:String!):Order
 }
 
 schema{

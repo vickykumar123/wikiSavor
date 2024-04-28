@@ -1,5 +1,5 @@
 import {fetchApi} from "@/lib/fetchApi";
-import {Restaurant} from "@/types";
+import {Restaurant, UpdateOrderStatus} from "@/types";
 import {useAuth0} from "@auth0/auth0-react";
 import {useMutation, useQuery} from "react-query";
 import {toast} from "sonner";
@@ -207,20 +207,19 @@ export const useUploadImage = () => {
   return {uploadImageMutate, isLoading};
 };
 
-export const useGetCurrentUserOrder = () => {
+export const useGetCurrentUserRestaurantOrder = () => {
   const {getAccessTokenSilently} = useAuth0();
   const getCurrentUserOrder = async () => {
     const accessToken = await getAccessTokenSilently();
     const requestBody = {
       query: `query CurrentUserRestaurantOrder{
         currentUserRestaurantOrders{
+          _id
           restaurant{
             restaurantName
           }
-          user{
-            name
-          }
           deliveryDetails{
+            name
             addressLine1
             city
             country
@@ -231,6 +230,7 @@ export const useGetCurrentUserOrder = () => {
           }
           status
           totalAmount
+          createdAt
         }
       }`,
     };
@@ -242,9 +242,49 @@ export const useGetCurrentUserOrder = () => {
     const responseData = await response.json();
     return responseData.data.currentUserRestaurantOrders;
   };
-  const {data: order, isLoading} = useQuery(
+  const {data: orders, isLoading} = useQuery(
     "fetchRestaurantOrder",
     getCurrentUserOrder
   );
-  return {order, isLoading};
+  return {orders, isLoading};
+};
+
+export const useUpdateOrderStatus = () => {
+  const {getAccessTokenSilently} = useAuth0();
+  const updateOrderStatus = async (updateOrderStatus: UpdateOrderStatus) => {
+    const accessToken = await getAccessTokenSilently();
+    const requestBody = {
+      query: `mutation UpdateOrderStatus($orderId:String!, $status:String!) {
+        updateOrderStatus(orderId: $orderId, status: $status) {
+          status
+        }
+      }`,
+      variables: {
+        orderId: updateOrderStatus.orderId,
+        status: updateOrderStatus.status,
+      },
+    };
+    const response = await fetchApi(requestBody, accessToken);
+    if (!response.ok) {
+      throw new Error("Unable to update restaurant status");
+    }
+    const responseData = await response.json();
+    return responseData.data.updateOrderStatus;
+  };
+  const {
+    mutateAsync: updateRestaurantStatus,
+    isLoading,
+    isError,
+    isSuccess,
+    reset,
+  } = useMutation(updateOrderStatus);
+  if (isSuccess) {
+    toast.success("Updated the order status");
+  }
+  if (isError) {
+    toast.error("Unable to update the status");
+    reset();
+  }
+
+  return {updateRestaurantStatus, isLoading};
 };

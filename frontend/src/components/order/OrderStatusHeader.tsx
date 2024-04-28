@@ -2,6 +2,7 @@ import {Order} from "@/types";
 import {useMemo} from "react";
 import {Progress} from "../ui/progress";
 import {ORDER_STATUS} from "@/lib/order-status-config";
+import {dateFomatter} from "@/lib/dateFormatter";
 
 interface OrderStatusHeaderProps {
   order: Order;
@@ -13,19 +14,7 @@ export default function OrderStatusHeader({order}: OrderStatusHeaderProps) {
     created.setMinutes(
       created.getMinutes() + order.restaurant.estimatedDeliveryTime
     );
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "numeric",
-    };
-
-    const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
-      created
-    );
-    return formattedDate;
+    return dateFomatter(created);
   }, [order.createdAt, order.restaurant.estimatedDeliveryTime]);
 
   const getOrderInfo = useMemo(() => {
