@@ -2,7 +2,9 @@ import {Request, Response} from "express";
 import Restaurant from "../../models/restaurant";
 import {Restaurant as RestaurantType} from "../../types/modelType";
 import client from "../../redis/client";
-import {restaurantDetailKey, userRestaurantKey} from "../../redis/keys";
+import {currentUserRestaurantKey, userRestaurantKey} from "../../redis/keys";
+import Order from "../../models/order";
+import {deleteRestaurantCache} from "../../lib/delete-cache/restaurant-cache";
 
 export const restaurant = {
   createUserRestaurant: async (
@@ -129,12 +131,43 @@ export const restaurant = {
         path: "menu",
         strictPopulate: false,
       });
-      await client.del(userRestaurantKey(req.userId));
-      await client.del(restaurantDetailKey(restaurant._id.toString()));
+      await deleteRestaurantCache(req, restaurant);
       return fullRestaurant;
     } catch (error) {
       console.log(error);
       throw new Error("Unable to create the restaurant");
+    }
+  },
+
+  currentUserRestaurantOrders: async (_: any, context: {req: Request}) => {
+    try {
+      const {req} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
+      let userRestaurant;
+      const restaurantIdCache = await client.get(
+        currentUserRestaurantKey(req.userId)
+      );
+      if (restaurantIdCache !== null && restaurantIdCache !== "null") {
+        userRestaurant = JSON.parse(restaurantIdCache);
+      } else {
+        userRestaurant = await Restaurant.findOne({user: req.userId});
+        await client.set(
+          currentUserRestaurantKey(req.userId),
+          JSON.stringify(userRestaurant)
+        );
+      }
+      if (!userRestaurant) {
+        throw new Error("Restaurant not found");
+      }
+
+      const orders = await Order.find({restaurant: userRestaurant._id})
+        .populate("restaurant")
+        .populate("user");
+      return orders;
+    } catch (error) {
+      throw new Error("Unable to fetch the order");
     }
   },
 };

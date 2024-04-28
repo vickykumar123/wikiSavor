@@ -15,6 +15,7 @@ export interface Menu {
 }
 
 export interface Restaurant {
+  _id: string;
   user: User;
   restaurantName: string;
   city: string;
@@ -28,6 +29,7 @@ export interface Restaurant {
 }
 
 export interface Order {
+  _id: string;
   restaurant: Restaurant;
   user: User;
   deliveryDetails: {

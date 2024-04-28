@@ -101,6 +101,7 @@ type RootQuery{
     searchRestaurant(city:String):SearchRestaurant
     restaurantDetail(restaurantId:String!):Restaurant
     getCurrentUserOrder:[Order]
+    currentUserRestaurantOrders:[Order]
 }
 
 type RootMutation{

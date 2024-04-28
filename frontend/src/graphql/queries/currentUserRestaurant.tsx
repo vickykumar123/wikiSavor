@@ -31,7 +31,6 @@ export const useGetCurrentUserRestaurant = () => {
       throw new Error("Unable to fetch the infomation");
     }
     const responseData = response.json();
-    // @ts-ignore
 
     return responseData;
   };
@@ -206,4 +205,46 @@ export const useUploadImage = () => {
 
   if (isError) toast.error("Unable to upload the image, try after sometime.");
   return {uploadImageMutate, isLoading};
+};
+
+export const useGetCurrentUserOrder = () => {
+  const {getAccessTokenSilently} = useAuth0();
+  const getCurrentUserOrder = async () => {
+    const accessToken = await getAccessTokenSilently();
+    const requestBody = {
+      query: `query CurrentUserRestaurantOrder{
+        currentUserRestaurantOrders{
+          restaurant{
+            restaurantName
+          }
+          user{
+            name
+          }
+          deliveryDetails{
+            addressLine1
+            city
+            country
+          }
+          cartItems{
+            name
+            quantity
+          }
+          status
+          totalAmount
+        }
+      }`,
+    };
+
+    const response = await fetchApi(requestBody, accessToken);
+    if (!response.ok) {
+      throw new Error("Unable to fetch the order");
+    }
+    const responseData = await response.json();
+    return responseData.data.currentUserRestaurantOrders;
+  };
+  const {data: order, isLoading} = useQuery(
+    "fetchRestaurantOrder",
+    getCurrentUserOrder
+  );
+  return {order, isLoading};
 };

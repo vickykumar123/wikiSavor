@@ -39,7 +39,7 @@ export default function PaginationPage({
           )}
         </PaginationItem>
         {pageNumber.map((number) => (
-          <PaginationItem>
+          <PaginationItem key={number}>
             <PaginationLink
               href="#"
               onClick={() => onPageChange(number)}

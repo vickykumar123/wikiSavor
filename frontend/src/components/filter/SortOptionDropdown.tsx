@@ -43,6 +43,7 @@ export default function SortOptionDropdown({onChange, sortOption}: Props) {
           <DropdownMenuItem
             className="cursor-pointer"
             onClick={() => onChange(option.value)}
+            key={option.value}
           >
             {option.label}
           </DropdownMenuItem>

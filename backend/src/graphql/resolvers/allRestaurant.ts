@@ -38,7 +38,7 @@ export const allRestaurant = {
         ];
       }
 
-      const pageSize = 10;
+      const pageSize = 6;
       const skip = (page - 1) * pageSize;
       const restaurant = await Restaurant.find(query)
         .sort({[sortOption]: 1})

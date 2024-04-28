@@ -102,10 +102,10 @@ export default function SearchPage() {
           />
         </div>
         {results.data.map((restaurant: any) => (
-          <>
+          <div key={restaurant._id}>
             <SearchResultCard restaurant={restaurant} />
             <Separator />
-          </>
+          </div>
         ))}
         <PaginationPage
           page={results.pagination.page}

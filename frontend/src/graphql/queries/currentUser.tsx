@@ -41,13 +41,10 @@ export const useGetCurrentUser = () => {
     return responseData.data.getCurrentUserInfo;
   };
 
-  const {
-    data: currentUserData,
-    isLoading,
-    isError,
-  } = useQuery("getCurrentUserInfo", getCurrentUser);
-
-  if (isError) toast.error("Something went wrong, Please try again later!!");
+  const {data: currentUserData, isLoading} = useQuery(
+    "getCurrentUserInfo",
+    getCurrentUser
+  );
 
   return {currentUserData, isLoading};
 };
