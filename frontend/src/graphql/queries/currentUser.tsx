@@ -121,6 +121,7 @@ export const useUpdateMyUser = () => {
 
   if (isSuccess) {
     toast.success("User profile updated!");
+    reset();
   }
   if (isError) {
     toast.error("Unable to update the profile, Please try again!");

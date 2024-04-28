@@ -20,6 +20,7 @@ interface OrderItemCardProps {
 }
 
 export default function OrderItemCard({order}: OrderItemCardProps) {
+  console.log(order);
   const {updateRestaurantStatus, isLoading} = useUpdateOrderStatus();
   const [status, setStatus] = useState<OrderStatus>(order.status);
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function OrderItemCard({order}: OrderItemCardProps) {
   };
 
   const getTime = () => {
-    const orderDateTime = new Date(+order.createdAt);
+    const orderDateTime = new Date(order.createdAt);
     return dateFomatter(orderDateTime);
   };
   return (
@@ -58,7 +59,7 @@ export default function OrderItemCard({order}: OrderItemCardProps) {
           <div>
             Total Cost:
             <span className="ml-2 font-normal">
-              ${order.totalAmount.toFixed(2)}
+              ${order.totalAmount?.toFixed(2)}
             </span>
           </div>
         </CardTitle>

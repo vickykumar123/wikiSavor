@@ -4,6 +4,8 @@ import Restaurant from "../../models/restaurant";
 import {createLineItems} from "../../lib/stripe/lineItems";
 import {createSession} from "../../lib/stripe/session";
 import Order from "../../models/order";
+import client from "../../redis/client";
+import {currentUserKey} from "../../redis/keys";
 
 export type CheckoutSessionRequest = {
   cartItems: {
@@ -11,6 +13,13 @@ export type CheckoutSessionRequest = {
     name: string;
     quantity: string;
   }[];
+  deliveryDetail: {
+    name: string;
+    email: string;
+    addressLine1: string;
+    city: string;
+    country: string;
+  };
   restaurantId: string;
 };
 
@@ -28,11 +37,13 @@ export const order = {
       if (!req.userId) {
         throw new Error("Unauthorized");
       }
-      const user = await User.findById(req.userId);
+      console.log(checkout);
+      const cacheUser = await client.get(currentUserKey(req.auth0Id));
+      const user = JSON.parse(cacheUser!);
       const restaurant = await Restaurant.findById(
         checkout.restaurantId
       ).populate("menuItems");
-      if (!user || !restaurant) {
+      if (!restaurant) {
         throw new Error("Restaurant or User not found");
       }
       // Creating the new Order.
@@ -41,11 +52,11 @@ export const order = {
         user: req.userId,
         status: "placed",
         deliveryDetails: {
-          email: user.email,
-          addressLine1: user.addressLine1,
-          city: user.city,
-          name: user.name,
-          country: user.country,
+          addressLine1: checkout.deliveryDetail.addressLine1,
+          email: checkout.deliveryDetail.email,
+          city: checkout.deliveryDetail.city,
+          name: checkout.deliveryDetail.name,
+          country: checkout.deliveryDetail.country,
         },
         cartItems: checkout.cartItems,
         createdAt: new Date(),

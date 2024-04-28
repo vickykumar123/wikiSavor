@@ -288,3 +288,43 @@ export const useUpdateOrderStatus = () => {
 
   return {updateRestaurantStatus, isLoading};
 };
+
+export const useDeliveredOrder = () => {
+  const {getAccessTokenSilently} = useAuth0();
+  const deliveredOrder = async () => {
+    const accessToken = await getAccessTokenSilently();
+    const requestBody = {
+      query: `query DeliveredOrder{
+        deliveredOrdered{
+          _id
+          deliveryDetails{
+            name,
+            addressLine1,
+            city,
+            country
+          }
+          totalAmount
+          status
+          cartItems{
+            menuItemsId
+            name
+            quantity
+          }
+          createdAt
+        }
+      }`,
+    };
+    const response = await fetchApi(requestBody, accessToken);
+    if (!response.ok) {
+      throw new Error("Unable to fetch delivered details");
+    }
+    const responseData = await response.json();
+    return responseData.data.deliveredOrdered;
+  };
+
+  const {data: deliveredResult, isLoading} = useQuery(
+    "deliveredOrder",
+    deliveredOrder
+  );
+  return {deliveredResult, isLoading};
+};

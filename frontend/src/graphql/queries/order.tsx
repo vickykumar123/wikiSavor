@@ -11,10 +11,11 @@ export const useCreateCheckoutSession = () => {
   ) => {
     const accessToken = await getAccessTokenSilently();
     const requestBody = {
-      query: `mutation CheckoutSession($cartItem: [CartItem], $restaurantId: String!) {
+      query: `mutation CheckoutSession($cartItem: [CartItem],$deliveryDetail:DeliveryDetailsInput,$restaurantId: String!) {
         createCheckoutSession(
           checkout: {
             cartItems:$cartItem
+            deliveryDetail:$deliveryDetail
             restaurantId:$restaurantId
           }
         ) {
@@ -23,6 +24,7 @@ export const useCreateCheckoutSession = () => {
       }`,
       variables: {
         cartItem: checkSessionRequest.cartItems,
+        deliveryDetail: checkSessionRequest.deliveryDetail,
         restaurantId: checkSessionRequest.restaurantId,
       },
     };
@@ -88,7 +90,11 @@ export const useGetCurrentUserOrder = () => {
   };
   const {data: userOrders, isLoading} = useQuery(
     "currentUserOrders",
-    getCurrentUserOrder
+    getCurrentUserOrder,
+    {
+      refetchInterval: 3000,
+      refetchIntervalInBackground: true,
+    }
   );
   return {userOrders, isLoading};
 };

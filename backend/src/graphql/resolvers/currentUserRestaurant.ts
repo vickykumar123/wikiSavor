@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import Restaurant from "../../models/restaurant";
 import {Restaurant as RestaurantType} from "../../types/modelType";
 import client from "../../redis/client";
-import {currentUserRestaurantKey, userRestaurantKey} from "../../redis/keys";
+import {deliveredOrderKey, userRestaurantKey} from "../../redis/keys";
 import Order from "../../models/order";
 import {deleteRestaurantCache} from "../../lib/delete-cache/restaurant-cache";
 
@@ -145,24 +145,19 @@ export const restaurant = {
       if (!req.userId) {
         throw new Error("Unauthorized");
       }
-      let userRestaurant;
-      const restaurantIdCache = await client.get(
-        currentUserRestaurantKey(req.userId)
-      );
-      if (restaurantIdCache !== null && restaurantIdCache !== "null") {
-        userRestaurant = JSON.parse(restaurantIdCache);
-      } else {
-        userRestaurant = await Restaurant.findOne({user: req.userId});
-        await client.set(
-          currentUserRestaurantKey(req.userId),
-          JSON.stringify(userRestaurant)
-        );
-      }
+
+      const userRestaurant = await Restaurant.findOne({
+        user: req.userId,
+      });
+
       if (!userRestaurant) {
         throw new Error("Restaurant not found");
       }
 
-      const orders = await Order.find({restaurant: userRestaurant._id})
+      const orders = await Order.find({
+        restaurant: userRestaurant._id,
+        status: {$ne: "delivered"},
+      })
         .populate("restaurant")
         .populate("user");
       return orders;
@@ -197,9 +192,51 @@ export const restaurant = {
       }
       order.status = status;
       await order.save();
+      if (order.status === "delivered") {
+        await client.del(deliveredOrderKey(req.userId));
+      }
+
       return order;
     } catch (error) {
       console.log("Unable to update the order");
+    }
+  },
+
+  deliveredOrdered: async (_: any, context: {req: Request}) => {
+    try {
+      const {req} = context;
+      if (!req.userId) {
+        throw new Error("Unauthorized");
+      }
+
+      const deliveredOrderCache = await client.get(
+        deliveredOrderKey(req.userId)
+      );
+
+      if (deliveredOrderCache !== null && deliveredOrderCache !== "null") {
+        console.log("From Cache");
+        return JSON.parse(deliveredOrderCache);
+      }
+
+      const userRestaurant = await Restaurant.findOne({
+        user: req.userId,
+      });
+
+      if (!userRestaurant) {
+        throw new Error("Restaurant not found");
+      }
+
+      const orders = await Order.find({
+        restaurant: userRestaurant._id,
+        status: {$eq: "delivered"},
+      })
+        .populate("restaurant")
+        .populate("user")
+        .limit(5);
+      await client.set(deliveredOrderKey(req.userId), JSON.stringify(orders));
+      return orders;
+    } catch (error) {
+      throw new Error("Unable to fetch the delivered order");
     }
   },
 };

@@ -11,6 +11,8 @@ import {Loader2} from "lucide-react";
 import {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useCreateCheckoutSession} from "@/graphql/queries/order";
+import {UserFormData} from "@/form/UserProfileForm";
+import {useUpdateMyUser} from "@/graphql/queries/currentUser";
 
 export default function RestaurantDetail() {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ export default function RestaurantDetail() {
     useGetRestaurantDetails(restaurantId);
   const {createCheckSession, isLoading: CreateCheckoutLoading} =
     useCreateCheckoutSession();
+  const {updateUser, isLoading: isUpdatingUser} = useUpdateMyUser();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItem = sessionStorage.getItem(`cartItems:${restaurantId}`);
@@ -70,16 +73,24 @@ export default function RestaurantDetail() {
     });
   };
 
-  const onCheckout = async () => {
+  const onCheckout = async (userFormData: UserFormData) => {
     if (!restaurant) {
       return;
     }
+    updateUser(userFormData);
     const checkoutData = {
       cartItems: cartItems.map((cartItem) => ({
         menuItemId: cartItem._id,
         name: cartItem.name,
         quantity: cartItem.quantity.toString(),
       })),
+      deliveryDetail: {
+        name: userFormData.name,
+        email: userFormData.email!,
+        city: userFormData.city,
+        country: userFormData.country,
+        addressLine1: userFormData.addressLine1,
+      },
       restaurantId: restaurant._id!,
     };
     const data = await createCheckSession(checkoutData);
@@ -128,7 +139,7 @@ export default function RestaurantDetail() {
                 <CheckoutButton
                   disabled={cartItems.length === 0 || CreateCheckoutLoading}
                   onCheckout={onCheckout}
-                  isLoading={CreateCheckoutLoading}
+                  isLoading={CreateCheckoutLoading || isUpdatingUser}
                 />
               </CardFooter>
             </Card>

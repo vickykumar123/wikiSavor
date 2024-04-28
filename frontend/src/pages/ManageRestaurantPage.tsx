@@ -3,6 +3,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import ManageRestaurantForm from "@/form/manage-restaurant-form/ManageRestaurantForm";
 import {
   useCreateCurrentUserRestaurant,
+  useDeliveredOrder,
   useGetCurrentUserRestaurant,
   useGetCurrentUserRestaurantOrder,
   useUpdateCurrentUserRestaurant,
@@ -18,9 +19,10 @@ export default function ManageRestaurantPage() {
     useUpdateCurrentUserRestaurant();
   const {orders, isLoading: isOrderLoading} =
     useGetCurrentUserRestaurantOrder();
+  const {deliveredResult, isLoading: isDeliveredLoading} = useDeliveredOrder();
   // @ts-ignore
   const isEditing = !!restaurantData?.data;
-  if (isGetting || isOrderLoading) {
+  if (isGetting || isOrderLoading || isDeliveredLoading) {
     return (
       <Loader2 size={40} className="animate-spin text-orange-500 mx-auto" />
     );
@@ -39,6 +41,10 @@ export default function ManageRestaurantPage() {
           <h2 className="text-2xl font-bold">{orders?.length} active orders</h2>
           {orders?.map((order: Order) => (
             <OrderItemCard key={order._id} order={order} />
+          ))}
+          <h2 className="text-2xl font-bold">Order Delivered</h2>
+          {deliveredResult?.map((delivered: Order) => (
+            <OrderItemCard key={delivered._id} order={delivered} />
           ))}
         </TabsContent>
         <TabsContent value="manage-restaurant">

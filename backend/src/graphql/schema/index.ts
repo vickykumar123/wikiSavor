@@ -2,6 +2,7 @@ import {buildSchema} from "graphql";
 export const schema = buildSchema(`
 scalar MenuInputs
 scalar CartItem
+scalar DeliveryDetailsInput
 type User{
     _id:String!
     auth0Id:String!
@@ -92,6 +93,7 @@ input RestaurantInput{
 
 input CheckoutInput{
     cartItems:[CartItem]
+    deliveryDetail:DeliveryDetailsInput
     restaurantId:String!
 }
 type RootQuery{
@@ -102,6 +104,7 @@ type RootQuery{
     restaurantDetail(restaurantId:String!):Restaurant
     getCurrentUserOrder:[Order]
     currentUserRestaurantOrders:[Order]
+    deliveredOrdered:[Order]
 }
 
 type RootMutation{

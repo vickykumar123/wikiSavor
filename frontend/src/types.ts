@@ -38,6 +38,13 @@ export type CheckoutSessionRequest = {
     name: string;
     quantity: string;
   }[];
+  deliveryDetail: {
+    name: string;
+    email: string;
+    addressLine1: string;
+    city: string;
+    country: string;
+  };
   restaurantId: string;
 };
 
