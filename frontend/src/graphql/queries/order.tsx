@@ -93,7 +93,6 @@ export const useGetCurrentUserOrder = () => {
     getCurrentUserOrder,
     {
       refetchInterval: 3000,
-      refetchIntervalInBackground: true,
     }
   );
   return {userOrders, isLoading};

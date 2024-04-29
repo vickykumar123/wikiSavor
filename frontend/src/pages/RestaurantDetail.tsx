@@ -12,7 +12,6 @@ import {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useCreateCheckoutSession} from "@/graphql/queries/order";
 import {UserFormData} from "@/form/UserProfileForm";
-import {useUpdateMyUser} from "@/graphql/queries/currentUser";
 
 export default function RestaurantDetail() {
   const navigate = useNavigate();
@@ -21,7 +20,6 @@ export default function RestaurantDetail() {
     useGetRestaurantDetails(restaurantId);
   const {createCheckSession, isLoading: CreateCheckoutLoading} =
     useCreateCheckoutSession();
-  const {updateUser, isLoading: isUpdatingUser} = useUpdateMyUser();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItem = sessionStorage.getItem(`cartItems:${restaurantId}`);
@@ -77,7 +75,6 @@ export default function RestaurantDetail() {
     if (!restaurant) {
       return;
     }
-    updateUser(userFormData);
     const checkoutData = {
       cartItems: cartItems.map((cartItem) => ({
         menuItemId: cartItem._id,
@@ -139,7 +136,7 @@ export default function RestaurantDetail() {
                 <CheckoutButton
                   disabled={cartItems.length === 0 || CreateCheckoutLoading}
                   onCheckout={onCheckout}
-                  isLoading={CreateCheckoutLoading || isUpdatingUser}
+                  isLoading={CreateCheckoutLoading}
                 />
               </CardFooter>
             </Card>

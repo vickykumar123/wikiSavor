@@ -36,6 +36,7 @@ const DeliveryDetailsScalar = new GraphQLScalarType({
   },
   parseLiteral(ast) {
     if (ast.kind === Kind.OBJECT) {
+      // @ts-ignore
       const {name, addressLine1, city, country} = ast.value;
       return {name, addressLine1, city, country};
     }

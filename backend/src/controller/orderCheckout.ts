@@ -29,7 +29,7 @@ export async function orderCheckoutWebhook(req: Request, res: Response) {
     order.status = "paid";
     await createNotification(
       `Successfully placed order in ${order.restaurant.restaurantName}`,
-      req.userId.toString()
+      req?.userId?.toString()
     );
     await order.save();
   }

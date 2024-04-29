@@ -1,3 +1,4 @@
+import {API_URL_IMAGE} from "@/lib/contants";
 import {fetchApi} from "@/lib/fetchApi";
 import {Restaurant, UpdateOrderStatus} from "@/types";
 import {useAuth0} from "@auth0/auth0-react";
@@ -193,8 +194,9 @@ export const useUploadImage = () => {
     formData.append("image", image);
 
     const accessToken = await getAccessTokenSilently();
-    const response = await fetch("http://localhost:3000/upload-single", {
+    const response = await fetch(API_URL_IMAGE, {
       method: "POST",
+      credentials: "include",
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
