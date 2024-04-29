@@ -65,6 +65,11 @@ type Order{
     createdAt:String
 }
 
+type Notification{
+    message:String
+    createdAt:String
+}
+
 input CurrentUserInput{
     auth0Id:String!
     email:String!
@@ -105,6 +110,7 @@ type RootQuery{
     getCurrentUserOrder:[Order]
     currentUserRestaurantOrders:[Order]
     deliveredOrdered:[Order]
+    getNotification:[Notification]
 }
 
 type RootMutation{

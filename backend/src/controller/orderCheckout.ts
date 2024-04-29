@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import Stripe from "stripe";
 import Order from "../models/order";
+import {createNotification} from "../lib/notification/createNotification";
 
 const STRIPE = new Stripe(process.env.STRIPE_API_KEY!);
 export async function orderCheckoutWebhook(req: Request, res: Response) {
@@ -26,6 +27,10 @@ export async function orderCheckoutWebhook(req: Request, res: Response) {
     }
     order.totalAmount = event.data.object.amount_total! / 100;
     order.status = "paid";
+    await createNotification(
+      `Successfully placed order in ${order.restaurant.restaurantName}`,
+      req.userId.toString()
+    );
     await order.save();
   }
   res.status(200).send();

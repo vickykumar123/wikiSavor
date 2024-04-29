@@ -37,7 +37,6 @@ export const order = {
       if (!req.userId) {
         throw new Error("Unauthorized");
       }
-      console.log(checkout);
       const cacheUser = await client.get(currentUserKey(req.auth0Id));
       const user = JSON.parse(cacheUser!);
       const restaurant = await Restaurant.findById(

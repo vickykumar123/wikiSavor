@@ -18,7 +18,7 @@ export default function MobileNav() {
       <SheetTrigger>
         <Menu className="text-orange-500" />
       </SheetTrigger>
-      <SheetContent className="bg-gray-100/60 rounded-l-md border-l-orange-600">
+      <SheetContent className="bg-gray-200 rounded-l-md border-l-orange-600">
         <SheetTitle>
           {!isAuthenticated ? (
             <span className="font-mono italic text-orange-600 font-semibold text-center">

@@ -3,6 +3,7 @@ import {Button} from "../ui/button";
 import UsernameMenu from "../UsernameMenu";
 import {Loader2} from "lucide-react";
 import {Link} from "react-router-dom";
+import Notification from "../notification/Notification";
 
 const DesktopNav = () => {
   const {isAuthenticated, isLoading, loginWithPopup} = useAuth0();
@@ -18,6 +19,9 @@ const DesktopNav = () => {
             >
               My Orders
             </Link>
+            <Button variant="ghost">
+              <Notification />
+            </Button>
             <UsernameMenu />
           </>
         )}

@@ -80,3 +80,8 @@ export type UpdateOrderStatus = {
   orderId: string;
   status: OrderStatus;
 };
+
+export type Notification = {
+  message: string;
+  createdAt: Date;
+};

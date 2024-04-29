@@ -166,10 +166,17 @@ $estimatedDeliveryTime: Float!,$cuisines: [String]!,$menuItems:[MenuInputs],$ima
     isLoading,
     isSuccess,
     isError,
+    reset,
   } = useMutation(updateCurrentUserRestaurant);
 
-  if (isSuccess) toast.success("Restaurant update!");
-  if (isError) toast.success("Restaurant not updated!");
+  if (isSuccess) {
+    toast.success("Restaurant update!");
+    reset();
+  }
+  if (isError) {
+    toast.success("Restaurant not updated!");
+    reset();
+  }
 
   return {updateRestaurant, isLoading};
 };

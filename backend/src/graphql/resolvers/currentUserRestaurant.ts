@@ -2,9 +2,14 @@ import {Request, Response} from "express";
 import Restaurant from "../../models/restaurant";
 import {Restaurant as RestaurantType} from "../../types/modelType";
 import client from "../../redis/client";
-import {deliveredOrderKey, userRestaurantKey} from "../../redis/keys";
+import {
+  currentUserNotification,
+  deliveredOrderKey,
+  userRestaurantKey,
+} from "../../redis/keys";
 import Order from "../../models/order";
 import {deleteRestaurantCache} from "../../lib/delete-cache/restaurant-cache";
+import {createNotification} from "../../lib/notification/createNotification";
 
 export const restaurant = {
   createUserRestaurant: async (
@@ -52,6 +57,10 @@ export const restaurant = {
         path: "menu",
         strictPopulate: false,
       });
+      await createNotification(
+        `Created restaurant ${restaurant.restaurantName} successfully`,
+        req.userId.toString()
+      );
       return fullRestaurant;
     } catch (error) {
       console.log(error);
@@ -132,6 +141,10 @@ export const restaurant = {
         strictPopulate: false,
       });
       await deleteRestaurantCache(req, restaurant);
+      await createNotification(
+        `Updated restaurant ${restaurant.restaurantName}`,
+        req.userId.toString()
+      );
       return fullRestaurant;
     } catch (error) {
       console.log(error);
@@ -193,6 +206,10 @@ export const restaurant = {
       order.status = status;
       await order.save();
       if (order.status === "delivered") {
+        await createNotification(
+          "Your order has been delivered",
+          order.user._id.toString()
+        );
         await client.del(deliveredOrderKey(req.userId));
       }
 
@@ -214,7 +231,6 @@ export const restaurant = {
       );
 
       if (deliveredOrderCache !== null && deliveredOrderCache !== "null") {
-        console.log("From Cache");
         return JSON.parse(deliveredOrderCache);
       }
 
@@ -232,7 +248,8 @@ export const restaurant = {
       })
         .populate("restaurant")
         .populate("user")
-        .limit(5);
+        .limit(5)
+        .sort({createdAt: -1});
       await client.set(deliveredOrderKey(req.userId), JSON.stringify(orders));
       return orders;
     } catch (error) {

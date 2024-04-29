@@ -2,7 +2,8 @@ import {Request, Response} from "express";
 import User from "../../models/user";
 import {User as UserType} from "../../types/modelType";
 import client from "../../redis/client";
-import {currentUserKey} from "../../redis/keys";
+import {currentUserKey, currentUserNotification} from "../../redis/keys";
+import {createNotification} from "../../lib/notification/createNotification";
 
 export const currentUser = {
   // Create User
@@ -59,6 +60,8 @@ export const currentUser = {
       currentUser.city = city;
       currentUser.country = country;
       await currentUser.save();
+
+      await createNotification("Updatad the profile", req.userId.toString());
       await client.del(currentUserKey(req.auth0Id));
       return currentUser;
     } catch (error) {

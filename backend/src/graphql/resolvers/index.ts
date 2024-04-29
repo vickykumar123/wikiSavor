@@ -1,6 +1,7 @@
 import {allRestaurant} from "./allRestaurant";
 import {currentUser} from "./currentUser";
 import {restaurant} from "./currentUserRestaurant";
+import {notification} from "./notification";
 import {order} from "./order";
 
 export const resolver = {
@@ -8,4 +9,5 @@ export const resolver = {
   ...restaurant,
   ...allRestaurant,
   ...order,
+  ...notification,
 };

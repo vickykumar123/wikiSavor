@@ -20,7 +20,6 @@ interface OrderItemCardProps {
 }
 
 export default function OrderItemCard({order}: OrderItemCardProps) {
-  console.log(order);
   const {updateRestaurantStatus, isLoading} = useUpdateOrderStatus();
   const [status, setStatus] = useState<OrderStatus>(order.status);
   useEffect(() => {
@@ -33,7 +32,12 @@ export default function OrderItemCard({order}: OrderItemCardProps) {
   };
 
   const getTime = () => {
-    const orderDateTime = new Date(order.createdAt);
+    let orderDateTime;
+    if (isNaN(+order.createdAt)) {
+      orderDateTime = new Date(order.createdAt);
+    } else {
+      orderDateTime = new Date(+order.createdAt);
+    }
     return dateFomatter(orderDateTime);
   };
   return (
