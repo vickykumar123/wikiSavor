@@ -21,9 +21,9 @@ export async function orderCheckoutWebhook(req: Request, res: Response) {
   }
 
   if (event.type === "checkout.session.completed") {
-    const order = await Order.findById(
-      event.data.object.metadata?.orderId
-    ).populate("restaurant");
+    const order = await Order.findById(event.data.object.metadata?.orderId)
+      .populate("restaurant")
+      .populate("user");
     if (!order) {
       return res.status(404).json({message: "Order not found"});
     }
@@ -34,6 +34,10 @@ export async function orderCheckoutWebhook(req: Request, res: Response) {
     await createNotification(
       `Successfully placed order in ${order.restaurant.restaurantName}`,
       order.user._id.toString()
+    );
+    await createNotification(
+      `Recieved order from ${order.user.name}`,
+      order.restaurant.user._id
     );
   }
   res.status(200).send();
