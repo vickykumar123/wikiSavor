@@ -21,17 +21,20 @@ export async function orderCheckoutWebhook(req: Request, res: Response) {
   }
 
   if (event.type === "checkout.session.completed") {
-    const order = await Order.findById(event.data.object.metadata?.orderId);
+    const order = await Order.findById(
+      event.data.object.metadata?.orderId
+    ).populate("restaurant");
     if (!order) {
       return res.status(404).json({message: "Order not found"});
     }
     order.totalAmount = event.data.object.amount_total! / 100;
     order.status = "paid";
+    await order.save();
+
     await createNotification(
       `Successfully placed order in ${order.restaurant.restaurantName}`,
-      req?.userId?.toString()
+      order.user._id.toString()
     );
-    await order.save();
   }
   res.status(200).send();
 }
