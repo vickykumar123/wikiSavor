@@ -205,6 +205,10 @@ export const restaurant = {
       }
       order.status = status;
       await order.save();
+      await createNotification(
+        `Order Update: ${order.status}`,
+        order.user._id.toString()
+      );
       if (order.status === "delivered") {
         await createNotification(
           "Your order has been delivered",
