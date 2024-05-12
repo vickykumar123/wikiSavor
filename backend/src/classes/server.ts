@@ -9,6 +9,7 @@ import {createHandler} from "graphql-http/lib/use/express";
 import {schema} from "../graphql/schema";
 import {resolver} from "../graphql/resolvers";
 import {orderCheckoutWebhook} from "../controller/orderCheckout";
+import {WebSocketServer} from "ws";
 
 class Server {
   private app: Express;

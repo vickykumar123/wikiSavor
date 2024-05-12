@@ -1,4 +1,4 @@
-import {Request} from "express";
+import {socket} from "../..";
 import client from "../../redis/client";
 import {currentUserNotification} from "../../redis/keys";
 
@@ -12,4 +12,11 @@ export async function createNotification(message: string, userId: string) {
     currentUserNotification(userId),
     JSON.stringify(notification)
   );
+  socket?.send(
+    JSON.stringify({
+      type: "notification",
+      message: "Sent a notification",
+    })
+  );
+  console.log("Sent the notification");
 }
